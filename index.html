@@ -2,10 +2,11 @@
 <html lang="en-ZA">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>TRD Motorcycles — Pre-owned bikes in Boksburg</title>
   <meta name="description" content="Pre-owned superbikes, adventure tourers, nakeds and cruisers at TRD Motorcycles, Boksburg. Browse every bike in stock with photos, specs and prices.">
-  <meta name="theme-color" content="#1C2129">
+  <meta name="theme-color" content="#EDEFF2">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23F5C518'/%3E%3Cpath d='M14 44a18 18 0 1 1 36 0' fill='none' stroke='%23121821' stroke-width='6' stroke-linecap='round'/%3E%3Cpath d='M32 44 44 26' stroke='%23E5391F' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,300..900&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
@@ -14,106 +15,140 @@
 <body>
   <a class="skip" href="#stock">Skip to stock</a>
 
-  <header class="nav">
+  <!-- NAV -->
+  <header class="nav" data-nav>
     <a class="wordmark" href="#top" aria-label="TRD Motorcycles home">TRD<span>Motorcycles</span></a>
-    <nav aria-label="Main">
+    <nav class="nav-pill" aria-label="Main">
       <a href="#stock">Stock</a>
-      <a href="https://torque.seritisolutions.co.za/app/financeapplication?CompanyCode=TDRM&amp;UniqueCode=A82F4248-1F38-4169-B2A6-9067A79F3696" target="_blank" rel="noopener">Finance</a>
-      <a href="https://www.trdmotorcycles.co.za/pages/sell-your-bike" target="_blank" rel="noopener">Sell your bike</a>
+      <a href="#rides">Styles</a>
+      <a href="#services">Finance</a>
       <a href="#visit">Visit</a>
     </nav>
-    <a class="btn btn-yellow nav-cta" href="https://wa.me/27642970282" target="_blank" rel="noopener">WhatsApp us</a>
+    <a class="btn btn-yellow nav-cta" href="https://wa.me/27642970282" target="_blank" rel="noopener">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20.5 5.3 16A8.5 8.5 0 1 1 8.4 19l-4.4 1.5Z"/></svg>
+      WhatsApp us
+    </a>
+    <button class="menu-btn" type="button" data-menu aria-expanded="false" aria-controls="menu" aria-label="Menu">
+      <span></span><span></span>
+    </button>
+    <div class="menu" id="menu" data-menu-panel hidden>
+      <a href="#stock">Stock</a>
+      <a href="#rides">Riding styles</a>
+      <a href="#services">Finance and trade-ins</a>
+      <a href="https://www.trdmotorcycles.co.za/pages/sell-your-bike" target="_blank" rel="noopener">Sell your bike</a>
+      <a href="#visit">Visit the showroom</a>
+    </div>
   </header>
 
   <main id="top">
-    <!-- HERO: rev counter -->
+    <!-- HERO -->
     <section class="hero" aria-labelledby="hero-title">
+      <svg class="line line-left" viewBox="0 0 520 760" aria-hidden="true">
+        <path pathLength="1" d="M-40 90C170 40 380 150 360 330S80 520 110 640s230 130 330 60"/>
+      </svg>
+      <svg class="line line-right" viewBox="0 0 620 860" aria-hidden="true">
+        <path pathLength="1" d="M660 60C420 10 160 120 180 330s300 200 340 90-110-170-260-80S90 640 260 820"/>
+      </svg>
+
       <div class="hero-copy">
-        <h1 id="hero-title" class="hero-title" data-headline>
-          <span>Hold the</span>
-          <span>throttle.</span>
-        </h1>
-        <p class="hero-sub">Rev it to the redline and shift through six bikes from our Boksburg floor. Let go to idle.</p>
+        <h1 id="hero-title" class="hero-title">Pre-owned bikes,<br>ready to ride.</h1>
+        <p class="hero-sub">Superbikes, adventure tourers, nakeds and cruisers on our Boksburg showroom floor. Every bike has photos, full specs and its price up front.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-yellow btn-lg" href="#stock">Browse the stock</a>
+          <a class="btn btn-white btn-lg" href="https://wa.me/27642970282?text=Hi%20TRD%2C%20I%27d%20like%20to%20book%20a%20viewing." target="_blank" rel="noopener">Book a viewing</a>
+        </div>
+      </div>
 
-        <div class="throttle-row">
-          <button class="throttle" type="button" data-throttle aria-describedby="throttle-hint">
-            <span class="throttle-grip" aria-hidden="true"></span>
-            <span class="throttle-label">Hold to rev</span>
+      <div class="fan" data-fan aria-label="Bikes on the floor"></div>
+
+      <div class="makes" data-makes aria-label="Shop by make"></div>
+    </section>
+
+    <!-- RIDING STYLES -->
+    <section class="rides" id="rides" aria-labelledby="rides-title">
+      <div class="section-head">
+        <h2 id="rides-title">Pick how<br>you ride.</h2>
+        <p class="lead">From a first big bike to a tourer that eats up the N3. Choose a style and we'll show you everything on the floor that fits.</p>
+      </div>
+      <ul class="ride-grid" data-rides></ul>
+    </section>
+
+    <!-- REV: scroll through six featured bikes -->
+    <section class="rev" data-rev data-dark aria-labelledby="rev-title">
+      <div class="rev-stage">
+        <div class="rev-copy">
+          <h2 id="rev-title" class="rev-title" data-rev-title><span>Six gears.</span><span>Six bikes.</span></h2>
+          <p class="rev-sub">Scroll to rev. Hit the redline and shift up to the next bike on the floor.</p>
+          <svg class="tach" viewBox="0 0 400 400" aria-hidden="true" data-tach>
+            <circle class="tach-face" cx="200" cy="200" r="190"/>
+            <path class="tach-redline" data-redline/>
+            <g data-ticks></g>
+            <g class="tach-needle" data-needle>
+              <line x1="200" y1="216" x2="200" y2="50"/>
+            </g>
+            <circle class="tach-hub" cx="200" cy="200" r="15"/>
+            <text class="tach-gear" x="200" y="292" text-anchor="middle" data-gear-num>1</text>
+            <text class="tach-rpm" x="200" y="324" text-anchor="middle" data-rpm>1 200 rpm</text>
+            <text class="tach-unit" x="200" y="138" text-anchor="middle">×1000</text>
+          </svg>
+          <button class="sound-toggle" type="button" data-sound aria-pressed="false">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z"/><path class="wave" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg>
+            <span>Engine sound off</span>
           </button>
-          <div class="throttle-meta">
-            <p id="throttle-hint">or hold the space bar</p>
-            <button class="sound-toggle" type="button" data-sound aria-pressed="false">Sound off</button>
+        </div>
+
+        <div class="rev-bike">
+          <div class="shift-lights" aria-hidden="true" data-lights></div>
+          <div class="rev-frame" data-rev-frame>
+            <img data-rev-img alt="" width="668" height="501">
+            <img data-rev-img-next alt="" width="668" height="501" aria-hidden="true">
+          </div>
+          <div class="rev-readout">
+            <div class="rev-info" aria-live="polite">
+              <p class="rev-make" data-rev-make></p>
+              <p class="rev-name" data-rev-name></p>
+              <p class="rev-meta" data-rev-meta></p>
+            </div>
+            <div class="rev-actions">
+              <ol class="gears" aria-label="Featured bikes by gear" data-gears></ol>
+              <button class="btn btn-yellow" type="button" data-rev-open>See this bike</button>
+            </div>
           </div>
         </div>
       </div>
-
-      <div class="hero-bike">
-        <div class="shift-lights" aria-hidden="true" data-lights></div>
-
-        <div class="bike-frame">
-          <img data-hero-img alt="" width="668" height="501">
-          <img data-hero-img-next alt="" width="668" height="501" aria-hidden="true">
-        </div>
-
-        <svg class="tach" viewBox="0 0 400 400" aria-hidden="true" data-tach>
-          <circle class="tach-face" cx="200" cy="200" r="190"/>
-          <path class="tach-redline" data-redline/>
-          <g data-ticks></g>
-          <g class="tach-needle" data-needle>
-            <line x1="200" y1="214" x2="200" y2="52"/>
-          </g>
-          <circle class="tach-hub" cx="200" cy="200" r="16"/>
-          <text class="tach-gear" x="200" y="290" text-anchor="middle" data-gear-num>1</text>
-          <text class="tach-rpm" x="200" y="322" text-anchor="middle" data-rpm>1 200 rpm</text>
-          <text class="tach-unit" x="200" y="140" text-anchor="middle">×1000</text>
-        </svg>
-
-        <div class="hero-readout">
-          <div class="readout-bike" aria-live="polite">
-            <p class="readout-title" data-hero-title></p>
-            <p class="readout-meta" data-hero-meta></p>
-          </div>
-          <ol class="gears" aria-label="Featured bikes by gear" data-gears></ol>
-          <button class="btn btn-line" type="button" data-hero-open>See this bike</button>
-        </div>
-      </div>
-
-      <div class="road" aria-hidden="true"><div class="road-line" data-road></div></div>
     </section>
 
     <!-- STOCK -->
     <section class="stock" id="stock" aria-labelledby="stock-title">
-      <div class="stock-head">
-        <h2 id="stock-title">On the floor</h2>
-        <p class="stock-count" data-count aria-live="polite"></p>
+      <div class="section-head">
+        <h2 id="stock-title">On the floor.</h2>
+        <p class="lead" data-count aria-live="polite">Loading the stock list…</p>
       </div>
 
       <form class="filters" data-filters role="search" onsubmit="return false">
-        <label class="field field-search">
+        <label class="search">
           <span class="sr">Search bikes</span>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
           <input type="search" name="q" placeholder="Search make, model or year" autocomplete="off">
         </label>
-        <fieldset class="styles" data-styles>
-          <legend class="sr">Riding style</legend>
-        </fieldset>
         <div class="selects">
-          <label class="field">
-            <span>Make</span>
+          <label class="select">
+            <span class="sr">Make</span>
             <select name="make" data-make><option value="">Any make</option></select>
           </label>
-          <label class="field">
-            <span>Max price</span>
+          <label class="select">
+            <span class="sr">Max price</span>
             <select name="price">
               <option value="">Any price</option>
-              <option value="50000">R50,000</option>
-              <option value="80000">R80,000</option>
-              <option value="120000">R120,000</option>
-              <option value="160000">R160,000</option>
-              <option value="220000">R220,000</option>
+              <option value="50000">Up to R50,000</option>
+              <option value="80000">Up to R80,000</option>
+              <option value="120000">Up to R120,000</option>
+              <option value="160000">Up to R160,000</option>
+              <option value="220000">Up to R220,000</option>
             </select>
           </label>
-          <label class="field">
-            <span>Sort</span>
+          <label class="select">
+            <span class="sr">Sort</span>
             <select name="sort">
               <option value="featured">Specials first</option>
               <option value="price-asc">Price, low to high</option>
@@ -123,79 +158,138 @@
             </select>
           </label>
         </div>
+        <fieldset class="chips" data-styles>
+          <legend class="sr">Riding style</legend>
+        </fieldset>
       </form>
 
       <ul class="grid" data-grid></ul>
       <div class="empty" data-empty hidden>
-        <p>No bikes match these filters.</p>
+        <p class="empty-title">No bikes match these filters.</p>
+        <p>Try another style or a higher price, or ask us on WhatsApp what's coming in.</p>
         <button class="btn btn-ink" type="button" data-clear>Clear filters</button>
+      </div>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="services" id="services" aria-labelledby="services-title">
+      <div class="section-head">
+        <h2 id="services-title">Finance, trade-ins<br>and viewings.</h2>
+      </div>
+      <div class="service-grid">
+        <article class="service service-finance">
+          <h3>Finance from <span data-min-monthly>R490</span> a month</h3>
+          <p>Apply online in a few minutes. The monthly amount on each bike is an estimate and subject to approval.</p>
+          <a class="btn btn-ink" href="https://torque.seritisolutions.co.za/app/financeapplication?CompanyCode=TDRM&amp;UniqueCode=A82F4248-1F38-4169-B2A6-9067A79F3696" target="_blank" rel="noopener">Apply for finance</a>
+        </article>
+        <article class="service service-sell">
+          <h3>Selling or trading in?</h3>
+          <p>We buy bikes outright and take trade-ins on anything on the floor. Send us the details and we'll make you an offer.</p>
+          <a class="btn btn-ink" href="https://www.trdmotorcycles.co.za/pages/sell-your-bike" target="_blank" rel="noopener">Get an offer</a>
+        </article>
+        <article class="service service-view">
+          <h3>See one in person</h3>
+          <p>Tell us which bike you like and when you're coming. We'll have it out and ready when you arrive.</p>
+          <a class="btn btn-ink" href="https://wa.me/27642970282?text=Hi%20TRD%2C%20I%27d%20like%20to%20book%20a%20viewing." target="_blank" rel="noopener">Book a viewing</a>
+        </article>
       </div>
     </section>
 
     <!-- VISIT -->
     <section class="visit" id="visit" aria-labelledby="visit-title">
-      <div class="visit-inner">
-        <h2 id="visit-title">Come ride one</h2>
-        <div class="visit-cols">
-          <div>
-            <h3>Showroom</h3>
-            <p>Unit 1, V-Max Square<br>Cnr Atlas Rd &amp; North Rand Rd<br>Boksburg, Gauteng, 1477</p>
-            <a class="text-link" href="https://www.google.com/maps/dir/?api=1&amp;destination=V-Max+Square+Atlas+Rd+Boksburg" target="_blank" rel="noopener">Get directions</a>
-          </div>
-          <div>
-            <h3>Talk to us</h3>
-            <p><a class="text-link" href="tel:+27110519104">(011) 051 9104</a><br>
-               <a class="text-link" href="https://wa.me/27642970282" target="_blank" rel="noopener">WhatsApp 064 297 0282</a><br>
-               <a class="text-link" href="mailto:admin@trdmotorcycles.co.za">admin@trdmotorcycles.co.za</a></p>
-          </div>
-          <div>
-            <h3>Selling or trading?</h3>
-            <p>We buy bikes and take trade-ins. Send us the details and we'll make you an offer.</p>
-            <a class="text-link" href="https://www.trdmotorcycles.co.za/pages/sell-your-bike" target="_blank" rel="noopener">Sell your bike</a>
-          </div>
+      <div class="visit-card">
+        <div class="visit-info">
+          <h2 id="visit-title">Come ride one.</h2>
+          <dl class="visit-list">
+            <div>
+              <dt>Showroom</dt>
+              <dd>Unit 1, V-Max Square<br>Cnr Atlas Rd &amp; North Rand Rd<br>Boksburg, Gauteng, 1477</dd>
+            </div>
+            <div>
+              <dt>Call</dt>
+              <dd><a href="tel:+27110519104">(011) 051 9104</a></dd>
+            </div>
+            <div>
+              <dt>WhatsApp</dt>
+              <dd><a href="https://wa.me/27642970282" target="_blank" rel="noopener">064 297 0282</a></dd>
+            </div>
+            <div>
+              <dt>Email</dt>
+              <dd><a href="mailto:admin@trdmotorcycles.co.za">admin@trdmotorcycles.co.za</a></dd>
+            </div>
+          </dl>
+          <a class="btn btn-yellow btn-lg" href="https://www.google.com/maps/dir/?api=1&amp;destination=V-Max+Square+Atlas+Rd+Boksburg" target="_blank" rel="noopener">Get directions</a>
+        </div>
+        <div class="visit-map">
+          <iframe title="Map of TRD Motorcycles, V-Max Square, Boksburg" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=V-Max+Square,+Atlas+Rd,+Boksburg&amp;z=15&amp;output=embed"></iframe>
         </div>
       </div>
     </section>
   </main>
 
   <footer class="footer">
-    <p>© TRD Motorcycles (Pty) Ltd, Boksburg</p>
-    <p>
-      <a href="https://www.instagram.com/trdmotorcyclesrsa/" target="_blank" rel="noopener">Instagram</a>
-      <a href="https://www.facebook.com/TRDMotorcyclesRSA/" target="_blank" rel="noopener">Facebook</a>
-      <a href="https://www.tiktok.com/@trdmotorcyclesrsa" target="_blank" rel="noopener">TikTok</a>
-    </p>
+    <p class="footer-mark" aria-hidden="true">TRD</p>
+    <div class="footer-row">
+      <p>© TRD Motorcycles (Pty) Ltd, Boksburg</p>
+      <p class="footer-links">
+        <a href="https://www.instagram.com/trdmotorcyclesrsa/" target="_blank" rel="noopener">Instagram</a>
+        <a href="https://www.facebook.com/TRDMotorcyclesRSA/" target="_blank" rel="noopener">Facebook</a>
+        <a href="https://www.tiktok.com/@trdmotorcyclesrsa" target="_blank" rel="noopener">TikTok</a>
+      </p>
+    </div>
   </footer>
 
   <!-- BIKE DETAIL -->
-  <dialog class="detail" data-detail aria-labelledby="detail-title">
-    <button class="detail-close" type="button" data-close aria-label="Close">×</button>
-    <div class="detail-body">
+  <dialog class="detail" data-detail aria-labelledby="detail-title" tabindex="-1">
+    <div class="detail-top">
+      <button class="round-btn" type="button" data-share aria-label="Share this bike">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V4m0 0L8 8m4-4 4 4"/><path d="M6 12v6.5A1.5 1.5 0 0 0 7.5 20h9a1.5 1.5 0 0 0 1.5-1.5V12"/></svg>
+      </button>
+      <button class="round-btn" type="button" data-close aria-label="Close">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div class="detail-body" data-detail-body>
       <div class="gallery">
         <div class="gallery-main">
           <img data-gallery-img alt="">
-          <button class="gallery-nav prev" type="button" data-prev aria-label="Previous photo">‹</button>
-          <button class="gallery-nav next" type="button" data-next aria-label="Next photo">›</button>
+          <button class="gallery-nav prev" type="button" data-prev aria-label="Previous photo">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 6-6 6 6 6"/></svg>
+          </button>
+          <button class="gallery-nav next" type="button" data-next aria-label="Next photo">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6 6 6-6 6"/></svg>
+          </button>
           <p class="gallery-count" data-gallery-count></p>
         </div>
         <div class="thumbs" data-thumbs></div>
       </div>
       <div class="detail-info">
-        <p class="detail-flag" data-detail-flag hidden>On special</p>
+        <div class="detail-tags">
+          <span class="style-tag" data-detail-style></span>
+          <span class="special-tag" data-detail-flag hidden>On special</span>
+        </div>
+        <p class="detail-make" data-detail-make></p>
         <h2 id="detail-title" data-detail-title></h2>
         <p class="detail-price" data-detail-price></p>
         <p class="detail-monthly" data-detail-monthly></p>
         <div class="detail-ctas">
-          <a class="btn btn-yellow" data-wa target="_blank" rel="noopener">WhatsApp about this bike</a>
-          <a class="btn btn-ink" href="https://torque.seritisolutions.co.za/app/financeapplication?CompanyCode=TDRM&amp;UniqueCode=A82F4248-1F38-4169-B2A6-9067A79F3696" target="_blank" rel="noopener">Apply for finance</a>
+          <a class="btn btn-yellow btn-lg" data-wa target="_blank" rel="noopener">WhatsApp about this bike</a>
+          <a class="btn btn-ink btn-lg" href="https://torque.seritisolutions.co.za/app/financeapplication?CompanyCode=TDRM&amp;UniqueCode=A82F4248-1F38-4169-B2A6-9067A79F3696" target="_blank" rel="noopener">Apply for finance</a>
         </div>
         <dl class="specs" data-specs></dl>
         <div class="desc" data-desc></div>
+        <div class="similar" data-similar-wrap hidden>
+          <h3>More like this</h3>
+          <ul data-similar></ul>
+        </div>
       </div>
     </div>
   </dialog>
 
+  <p class="toast" data-toast role="status" aria-live="polite"></p>
+
   <script src="assets/app.js"></script>
-  <script src="assets/hero.js"></script>
+  <script src="assets/rev.js"></script>
 </body>
 </html>
