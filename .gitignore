@@ -1,0 +1,5 @@
+.playwright-mcp/
+.DS_Store
+__pycache__/
+# 192 MB of photos, re-download with: python3 scraper/scrape_stock.py
+data/images/
