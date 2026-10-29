@@ -1,4 +1,4 @@
-// Stock list, filters, hero fan, riding styles and bike detail. Data comes from data/stock.json (see scraper/).
+// Hero video, nav, stock list, filters, riding styles and bike detail. Data comes from data/stock.json (see scraper/).
 (() => {
   const WHATSAPP = "27642970282";
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -13,19 +13,36 @@
     ["Cruiser", /cruiser|harley|diavel|night rod|fat bob|vzr|boulevard|softail|bobber/i],
     ["Off-road", /enduro|motocross|off-road|atv|quad|dirt/i],
   ];
-  const STYLE_INFO = {
-    Adventure: { tint: "var(--adventure)", blurb: "Long-travel tourers for gravel, passes and the long way home." },
-    Sport: { tint: "var(--sport)", blurb: "Superbikes and sport bikes for track days and early Sunday runs." },
-    Naked: { tint: "var(--naked)", blurb: "Upright, light and quick. The everyday bike that still thrills." },
-    Touring: { tint: "var(--touring)", blurb: "Big screens, cases and comfort for two-up trips." },
-    Cruiser: { tint: "var(--cruiser)", blurb: "Low seats, big twins and plenty of chrome." },
-    "Off-road": { tint: "var(--offroad)", blurb: "Enduro and dirt bikes for the trails." },
-    Other: { tint: "var(--other)", blurb: "Everything else on the floor." },
+  const BLURBS = {
+    Adventure: "Long-travel tourers for gravel, passes and the long way home.",
+    Sport: "Superbikes and sport bikes for track days and early Sunday runs.",
+    Naked: "Upright, light and quick. The everyday bike that still thrills.",
+    Touring: "Big screens, cases and comfort for two-up trips.",
+    Cruiser: "Low seats, big twins and plenty of chrome.",
+    "Off-road": "Enduro and dirt bikes for the trails.",
+    Other: "Everything else on the floor.",
   };
-  const tintOf = (style) => (STYLE_INFO[style] || STYLE_INFO.Other).tint;
+
+  // Accent per bike, picked from its paint or finish in the photos. Red is kept for the redline, yellow for buttons.
+  const PAINT = {
+    459683: "#ff8a3d", // Pan America 1250: Harley orange tank badge
+    459655: "#8e8cff", // R 1250 RT: sapphire metallic
+    474114: "#d3d9e0", // GSX 1300R: sword-silver graphics
+    489254: "#8fa6bd", // Diavel 1200: gunmetal
+    459648: "#d99a62", // Rocket 3 GT: bronze headers
+    459729: "#3d7dff", // CRF 1100 A: tricolour blue
+  };
+  const COLOUR_ACCENTS = [
+    [/blue/i, "#5b8cff"], [/white|pearl/i, "#e8eef6"], [/green|lime/i, "#62d68f"], [/orange/i, "#ff8a3d"],
+    [/red/i, "#ff8f6b"], [/yellow/i, "#d8c98c"], [/grey|gray|silver/i, "#b7c1cc"], [/black/i, "#c9d1da"],
+  ];
+  const accentOf = (b) => PAINT[b.id] || (COLOUR_ACCENTS.find(([re]) => re.test(b.colour || "")) || [0, "#c9d1da"])[1];
 
   const money = (n) => "R" + Math.round(n).toLocaleString("en-US");
-  const km = (n) => n.toLocaleString("en-US") + " km";
+  const num = (n) => Math.round(n).toLocaleString("en-US");
+  const km = (n) => num(n) + " km";
+  const waLink = (text) => `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(text)}`;
+  const askAbout = (b) => `Hi TRD, I'm interested in the ${b.title} (stock no. ${b.stock_no})${b.price ? ` for ${money(b.price)}` : ""}.`;
 
   function styleOf(bike) {
     // the first sentence of the description says what kind of bike it is
@@ -52,21 +69,28 @@
       wasPrice: special ? price : null,
       images: useLocal && local.length ? local : remote,
       fallbacks: remote,
+      cutout: `assets/bikes/${raw.id}.webp`,
       style: styleOf(raw),
     };
   }
 
   // Photos live in data/images when the scraper has run; otherwise (e.g. on GitHub) use the dealer's image host.
-  // Any single photo that still fails swaps to its remote copy.
+  // data-fb holds the next sources to try, space-separated; a cut-out that's missing falls back to its photo.
   const img = (b, i, attrs = "") => {
     const src = b.images[i];
     if (!src) return "";
     const fb = b.fallbacks[i] && b.fallbacks[i] !== src ? ` data-fb="${esc(b.fallbacks[i])}"` : "";
     return `<img src="${esc(src)}"${fb} ${attrs}>`;
   };
+  const cut = (b, attrs = "") =>
+    `<img src="${esc(b.cutout)}" data-fb="${esc([b.images[0], b.fallbacks[0]].filter((s, n, a) => s && a.indexOf(s) === n).join(" "))}" data-cut ${attrs}>`;
   document.addEventListener("error", (e) => {
     const t = e.target;
-    if (t.tagName === "IMG" && t.dataset.fb && t.getAttribute("src") !== t.dataset.fb) t.src = t.dataset.fb;
+    if (t.tagName !== "IMG" || !t.dataset.fb) return;
+    const [next, ...rest] = t.dataset.fb.split(" ");
+    t.dataset.fb = rest.join(" ");
+    if (t.hasAttribute("data-cut")) t.classList.add("is-photo");
+    t.src = next;
   }, true);
 
   // ---------- data ----------
@@ -93,29 +117,46 @@
     return out;
   }
 
-  window.TRD = { ready, openBike: (id) => openBike(id), money, km, pickFeatured, img, reduceMotion };
+  window.TRD = { ready, openBike: (id) => openBike(id), money, num, km, pickFeatured, img, cut, accentOf, reduceMotion, esc };
 
-  // ---------- nav ----------
+  // ---------- hero video ----------
+  // Sources are attached here rather than in the HTML, so nothing downloads for reduced-motion or Save-Data visitors.
+  const hero = $("[data-hero]");
+  const video = $("[data-hero-video]");
+  const saveData = navigator.connection && navigator.connection.saveData;
+  if (!reduceMotion.matches && !saveData) {
+    const phone = matchMedia("(max-width: 700px)").matches;
+    const sources = phone ? [[video.dataset.srcMobile, "video/mp4"]] : [[video.dataset.srcWebm, "video/webm"], [video.dataset.srcMp4, "video/mp4"]];
+    video.innerHTML = sources.map(([src, type]) => `<source src="${src}" type="${type}">`).join("");
+    video.preload = "auto";
+    video.load();
+    // play the video and keep it looping
+    video.play().catch(() => {});
+  }
+
+  // ---------- nav + hero hand-off ----------
   const nav = $("[data-nav]");
   const menuBtn = $("[data-menu]");
   const menu = $("[data-menu-panel]");
-  const setMenu = (open) => { menu.hidden = !open; menuBtn.setAttribute("aria-expanded", open); };
+  const setMenu = (open) => {
+    menu.hidden = !open;
+    menuBtn.setAttribute("aria-expanded", open);
+    document.documentElement.classList.toggle("menu-open", open);
+    if (open) menu.querySelector("a").focus();
+  };
   menuBtn.addEventListener("click", () => setMenu(menu.hidden));
   menu.addEventListener("click", (e) => { if (e.target.closest("a")) setMenu(false); });
-  document.addEventListener("click", (e) => { if (!menu.hidden && !e.target.closest("[data-nav]")) setMenu(false); });
   addEventListener("keydown", (e) => { if (e.key === "Escape" && !menu.hidden) { setMenu(false); menuBtn.focus(); } });
 
-  // the wordmark turns light over dark sections
-  const darkSections = [...document.querySelectorAll("[data-dark]")];
-  let navTick = 0;
-  function checkNav() {
-    navTick = 0;
-    const y = 44;
-    nav.classList.toggle("on-dark", darkSections.some((s) => { const r = s.getBoundingClientRect(); return r.top <= y && r.bottom >= y; }));
+  let tick = 0;
+  function onScroll() {
+    tick = 0;
+    const p = Math.min(1, scrollY / Math.max(1, hero.offsetHeight));
+    hero.style.setProperty("--p", reduceMotion.matches ? 0 : p.toFixed(4));
     nav.classList.toggle("scrolled", scrollY > 40);
   }
-  addEventListener("scroll", () => { if (!navTick) navTick = requestAnimationFrame(checkNav); }, { passive: true });
-  checkNav();
+  addEventListener("scroll", () => { if (!tick) tick = requestAnimationFrame(onScroll); }, { passive: true });
+  onScroll();
 
   // ---------- grid + filters ----------
   const grid = $("[data-grid]");
@@ -129,41 +170,36 @@
     bikes.forEach((b) => (styleCounts[b.style] = (styleCounts[b.style] || 0) + 1));
     const chip = (value, label, n, checked) => `
       <label class="chip"><input type="radio" name="style" value="${value}" ${checked ? "checked" : ""}>
-      <span>${value ? `<i style="--tint:${tintOf(value)}"></i>` : ""}${label} <small>${n}</small></span></label>`;
+      <span>${label} <small>${n}</small></span></label>`;
     $("[data-styles]").insertAdjacentHTML("beforeend",
       chip("", "All bikes", bikes.length, true) +
       [...STYLES.map(([s]) => s), "Other"].filter((s) => styleCounts[s]).map((s) => chip(s, s, styleCounts[s])).join(""));
 
     const makes = {};
     bikes.forEach((b) => (makes[b.makeLabel] = (makes[b.makeLabel] || 0) + 1));
-    const makeNames = Object.keys(makes).sort((a, b) => (a === "Other brands") - (b === "Other brands") || makes[b] - makes[a] || a.localeCompare(b));
     $("[data-make]").insertAdjacentHTML("beforeend",
-      [...makeNames].sort((a, b) => (a === "Other brands") - (b === "Other brands") || a.localeCompare(b))
+      Object.keys(makes).sort((a, b) => (a === "Other brands") - (b === "Other brands") || a.localeCompare(b))
         .map((m) => `<option value="${esc(m)}">${esc(m)} (${makes[m]})</option>`).join(""));
-    $("[data-makes]").innerHTML = makeNames.filter((m) => m !== "Other brands")
-      .map((m) => `<button class="make" type="button" data-make-pick="${esc(m)}">${esc(m)} <small>${makes[m]}</small></button>`).join("");
   }
 
   function card(b) {
-    const meta = [b.year, b.mileage_km != null && km(b.mileage_km), b.engine_cc && b.engine_cc + " cc"].filter(Boolean);
     return `
       <li class="bike">
-        <button class="bike-link" type="button" data-id="${esc(b.id)}">
-          <div class="bike-photo">
-            ${b.wasPrice ? '<span class="special-tag">On special</span>' : ""}
-            ${img(b, 0, `alt="${esc(b.title)}" loading="lazy" width="668" height="501"`)}
-            ${img(b, 1, 'alt="" loading="lazy" width="668" height="501"')}
-          </div>
-          <div class="bike-body">
-            <p class="bike-make">${esc(b.makeLabel)}</p>
-            <h3 class="bike-title">${esc(b.model || b.title)}</h3>
-            <ul class="bike-meta">${meta.map((m) => `<li>${esc(m)}</li>`).join("")}</ul>
-            <div class="bike-foot">
-              <span class="style-tag" style="--tint:${tintOf(b.style)}">${esc(b.style)}</span>
-              <p class="bike-price">${b.wasPrice ? `<s>${money(b.wasPrice)}</s>` : ""}${b.price ? money(b.price) : "Ask for price"}${b.monthly_installment ? `<small>or ${money(b.monthly_installment)} pm</small>` : ""}</p>
-            </div>
-          </div>
-        </button>
+        <div class="bike-photo">
+          ${b.wasPrice ? '<span class="special-tag">On special</span>' : ""}
+          ${img(b, 0, `alt="${esc(b.title)}" loading="lazy" decoding="async" width="668" height="501"`)}
+        </div>
+        <p class="bike-make">${esc([b.year, b.makeLabel].filter(Boolean).join(" "))}</p>
+        <h3 class="bike-title"><button type="button" data-id="${esc(b.id)}">${esc(b.model || b.title)}</button></h3>
+        <dl class="bike-nums">
+          <div><dt class="sr">Price</dt><dd class="bike-price">${b.price ? money(b.price) : "Ask for price"}${b.wasPrice ? ` <s>${money(b.wasPrice)}</s>` : ""}</dd></div>
+          ${b.mileage_km != null ? `<div><dt class="sr">Mileage</dt><dd>${km(b.mileage_km)}</dd></div>` : ""}
+        </dl>
+        ${b.monthly_installment ? `<p class="bike-pm">or about ${money(b.monthly_installment)} a month</p>` : ""}
+        <a class="btn btn-wa" href="${esc(waLink(askAbout(b)))}" target="_blank" rel="noopener">
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20.5 5.3 16A8.5 8.5 0 1 1 8.4 19l-4.4 1.5Z"/></svg>
+          WhatsApp about this bike<span class="sr">: ${esc(b.title)}</span>
+        </a>
       </li>`;
   }
 
@@ -191,7 +227,7 @@
     grid.innerHTML = list.map(card).join("");
     emptyEl.hidden = list.length > 0;
     countEl.textContent = list.length === bikes.length
-      ? `${bikes.length} pre-owned bikes, all at our Boksburg showroom. Tap any bike for every photo and the full spec sheet.`
+      ? `${bikes.length} pre-owned bikes, all at our Boksburg showroom. Tap a bike's name for every photo and the full spec sheet.`
       : `Showing ${list.length} of ${bikes.length} bikes.`;
   }
 
@@ -208,88 +244,34 @@
     const btn = e.target.closest("[data-id]");
     if (btn) openBike(btn.dataset.id);
   });
-  $("[data-makes]").addEventListener("click", (e) => {
-    const btn = e.target.closest("[data-make-pick]");
-    if (btn) showStock(() => (form.elements.make.value = btn.dataset.makePick));
-  });
 
   // ---------- riding styles ----------
-  function buildRides() {
+  function buildStyles() {
     const groups = {};
     bikes.forEach((b) => (groups[b.style] = groups[b.style] || []).push(b));
     const order = STYLES.map(([s]) => s).filter((s) => groups[s] && groups[s].length >= 2)
-      .sort((a, b) => groups[b].length - groups[a].length)
-      .slice(0, 5);
+      .sort((a, b) => groups[b].length - groups[a].length);
     const lowest = (list) => money(Math.min(...list.map((b) => b.price).filter(Boolean)));
-    const rideCard = (value, name, list, blurb, photo, extra = "") => `
-        <li>
-          <button class="ride${extra}" type="button" data-ride="${esc(value)}" style="--tint:${value ? tintOf(value) : "var(--tarmac)"}">
-            <h3>${esc(name)}</h3>
-            <span class="ride-count">${list.length} bikes from ${lowest(list)}</span>
-            <p>${esc(blurb)}</p>
-            <div class="ride-photo">${photo}</div>
-          </button>
-        </li>`;
-    const photoOf = (list, n) => [...list].filter((b) => b.images.length).sort((a, b) => b.price - a.price)[n];
-    const cards = order.map((s) => {
-      const cover = photoOf(groups[s], 0);
-      return rideCard(s, s, groups[s], STYLE_INFO[s].blurb, cover ? img(cover, 0, 'alt="" loading="lazy" width="668" height="501"') : "");
-    });
-    // the sixth card shows the whole floor
-    const stack = [0, 1, 2].map((n) => photoOf(bikes, n * 7)).filter(Boolean)
-      .map((b) => `<span>${img(b, 0, 'alt="" loading="lazy" width="668" height="501"')}</span>`).join("");
-    cards.push(rideCard("", "Everything", bikes, "Every bike on the floor, with specials first.", stack, " ride-all"));
-    $("[data-rides]").innerHTML = cards.join("");
-    $("[data-rides]").addEventListener("click", (e) => {
-      const btn = e.target.closest("[data-ride]");
+    const cover = (list) => [...list].filter((b) => b.images.length).sort((a, b) => b.price - a.price)[0];
+    const row = (value, name, list, blurb, b) => `
+      <li>
+        <button class="style-row" type="button" data-style-pick="${esc(value)}"${b ? ` style="--accent:${accentOf(b)}"` : ""}>
+          <span class="style-name">${esc(name)}</span>
+          <span class="style-meta"><strong>${list.length} bikes from ${lowest(list)}</strong>${esc(blurb)}</span>
+          ${b ? cut(b, 'class="style-bike" alt="" loading="lazy" decoding="async" width="576" height="391"') : ""}
+        </button>
+      </li>`;
+    $("[data-styles-list]").innerHTML =
+      order.map((s) => row(s, s, groups[s], BLURBS[s], cover(groups[s]))).join("") +
+      row("", "Everything", bikes, "Every bike on the floor, with specials first.", null);
+    $("[data-styles-list]").addEventListener("click", (e) => {
+      const btn = e.target.closest("[data-style-pick]");
       if (!btn) return;
       showStock(() => {
-        const radio = form.querySelector(`input[name="style"][value="${CSS.escape(btn.dataset.ride)}"]`);
+        const radio = form.querySelector(`input[name="style"][value="${CSS.escape(btn.dataset.stylePick)}"]`);
         if (radio) radio.checked = true;
       });
     });
-  }
-
-  // ---------- hero fan ----------
-  function buildFan(skip) {
-    const picks = pickFeatured(bikes, 5, skip);
-    const pos = [-2, -1, 0, 1, 2];
-    const order = [3, 1, 0, 2, 4]; // the priciest pick sits in the middle
-    const fan = $("[data-fan]");
-    fan.innerHTML = pos.map((p, i) => {
-      const b = picks[order[i]];
-      if (!b) return "";
-      return `
-        <button class="fan-card" type="button" data-id="${esc(b.id)}" data-pos="${p}" style="z-index:${3 - Math.abs(p)}; transition-delay:${Math.abs(p) * 60}ms">
-          ${img(b, 0, `alt="${esc(b.title)}" width="668" height="501"${Math.abs(p) > 1 ? ' loading="lazy"' : ""}`)}
-          <span class="fan-cap"><strong>${esc(b.model || b.title)}</strong><span>${money(b.price)}</span></span>
-        </button>`;
-    }).join("");
-    const layout = () => {
-      const w = fan.clientWidth;
-      const step = Math.min(250, w * (w < 600 ? .3 : .21));
-      fan.querySelectorAll(".fan-card").forEach((c) => {
-        const p = Number(c.dataset.pos);
-        c.style.setProperty("--x", `${p * step}px`);
-        c.style.setProperty("--y", `${Math.abs(p) * Math.abs(p) * 9 + Math.abs(p) * 8}px`);
-        c.style.setProperty("--r", `${p * 4.5}deg`);
-        c.style.setProperty("--s", `${1 - Math.abs(p) * .08}`);
-      });
-    };
-    layout();
-    addEventListener("resize", layout);
-    fan.addEventListener("click", (e) => {
-      const c = e.target.closest("[data-id]");
-      if (c) openBike(c.dataset.id);
-    });
-    // one orchestrated entrance: the cards fan out from a stack
-    const reveal = () => requestAnimationFrame(() => requestAnimationFrame(() => {
-      fan.classList.add("is-in");
-      setTimeout(() => fan.querySelectorAll(".fan-card").forEach((c) => (c.style.transitionDelay = "")), 1000);
-    }));
-    const middle = fan.querySelector('[data-pos="0"] img');
-    if (reduceMotion.matches || !middle || middle.complete) reveal();
-    else { middle.addEventListener("load", reveal, { once: true }); middle.addEventListener("error", reveal, { once: true }); setTimeout(reveal, 1200); }
   }
 
   // ---------- detail ----------
@@ -338,9 +320,8 @@
     const b = bikes.find((x) => String(x.id) === String(id));
     if (!b) return;
     current = b;
-    const styleTag = $("[data-detail-style]");
-    styleTag.textContent = b.style;
-    styleTag.style.setProperty("--tint", tintOf(b.style));
+    dialog.style.setProperty("--accent", accentOf(b));
+    $("[data-detail-style]").textContent = b.style;
     $("[data-detail-flag]").hidden = !b.wasPrice;
     $("[data-detail-make]").textContent = [b.year, b.makeLabel].filter(Boolean).join(" ");
     $("[data-detail-title]").textContent = b.model || b.title;
@@ -348,13 +329,12 @@
     $("[data-detail-monthly]").textContent = b.monthly_installment
       ? `About ${money(b.monthly_installment)} a month on finance, subject to approval`
       : "";
-    const msg = `Hi TRD, I'm interested in the ${b.title} (stock no. ${b.stock_no}) for ${money(b.price)}.`;
-    $("[data-wa]").href = `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`;
+    $("[data-wa]").href = waLink(askAbout(b));
 
     const specs = [
       ["Year", b.year],
       ["Mileage", b.mileage_km != null && km(b.mileage_km)],
-      ["Engine", b.engine_cc && `${b.engine_cc} cc`],
+      ["Engine", b.engine_cc && `${num(b.engine_cc)} cc`],
       ["Power", b.power_kw && `${b.power_kw} kW`],
       ["Torque", b.torque_nm && `${b.torque_nm} Nm`],
       ["Gears", b.gears],
@@ -431,9 +411,8 @@
     .then((rows) => {
       bikes = rows;
       buildFilters();
-      buildRides();
+      buildStyles();
       render();
-      buildFan(new Set(pickFeatured(bikes, 6).map((b) => b.id)));
       const monthly = bikes.map((b) => b.monthly_installment).filter(Boolean);
       if (monthly.length) $("[data-min-monthly]").textContent = money(Math.min(...monthly));
       const m = location.hash.match(/^#bike-(.+)$/);
