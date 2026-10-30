@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>TRD Motorcycles — Pre-owned bikes in Boksburg</title>
   <meta name="description" content="Pre-owned superbikes, adventure tourers, nakeds and cruisers at TRD Motorcycles, Boksburg. Browse every bike in stock with photos, specs and prices.">
-  <meta name="theme-color" content="#f5f2ec">
+  <meta name="theme-color" content="#f3f4f2">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23131210'/%3E%3Cpath d='M14 44a18 18 0 1 1 36 0' fill='none' stroke='%23F3EFE8' stroke-width='6' stroke-linecap='round'/%3E%3Cpath d='M32 44 44 26' stroke='%23FF3B1F' stroke-width='6' stroke-linecap='round'/%3E%3C/svg%3E">
 
   <!-- FONTS: Anybody (wide display, its width axis stretches with the revs) + Instrument Sans (body).
@@ -13,6 +13,7 @@
        @font-face block at the top of assets/styles.css. -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anybody:wdth,wght@50..150,500..900&family=Instrument+Sans:wght@400..700&display=swap" rel="stylesheet">
 
   <!-- the hero poster is the first thing painted, so fetch it early -->
@@ -25,6 +26,12 @@
   <!-- NAV: logo left, WhatsApp and menu right -->
   <header class="nav" data-nav>
     <a class="wordmark" href="#top" aria-label="TRD Motorcycles home">TRD<span>Motorcycles</span></a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#stock">Stock</a>
+      <a href="#sell">Sell or trade in</a>
+      <a href="#finance">Finance</a>
+      <a href="#visit">Visit us</a>
+    </nav>
     <div class="nav-right">
       <a class="nav-wa" href="https://wa.me/27642970282" target="_blank" rel="noopener">
         <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20.5 5.3 16A8.5 8.5 0 1 1 8.4 19l-4.4 1.5Z"/></svg>
@@ -45,7 +52,7 @@
   </header>
 
   <main id="top">
-    <!-- HERO -->
+    <!-- HERO: track footage, a stock search and a teaser for the 3D bike below -->
     <section class="hero" data-hero aria-labelledby="hero-title">
       <div class="hero-media" data-hero-media>
         <!-- VIDEO: 13 s track loop in assets/video/ (no audio track):
@@ -58,89 +65,119 @@
           data-src-webm="assets/video/hero.webm" data-src-mp4="assets/video/hero.mp4" data-src-mobile="assets/video/hero-mobile.mp4"></video>
         <div class="hero-shade"></div>
       </div>
+
       <div class="hero-copy">
-        <h1 id="hero-title" class="hero-title">Ride something better.</h1>
-        <p class="hero-sub">Pre-owned superbikes, adventure tourers, nakeds and cruisers on our Boksburg showroom floor, every one priced up front.</p>
-        <div class="hero-ctas">
-          <a class="btn btn-yellow btn-lg" href="#stock">See the stock</a>
-          <a class="btn btn-ghost btn-lg" href="https://wa.me/27642970282?text=Hi%20TRD%2C%20I%27d%20like%20to%20book%20a%20viewing." target="_blank" rel="noopener">
-            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20.5 5.3 16A8.5 8.5 0 1 1 8.4 19l-4.4 1.5Z"/></svg>
-            WhatsApp us
-          </a>
+        <h1 id="hero-title" class="hero-title">Ride something<br>better.</h1>
+        <p class="hero-sub"><span data-hero-count>Over 90</span> pre-owned bikes on our Boksburg floor, every one priced up front and ready to ride away.</p>
+
+        <form class="hero-search" data-hero-search role="search">
+          <label class="sr" for="hero-q">Search the stock</label>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
+          <input id="hero-q" name="q" type="search" placeholder="Search a make, model or year" autocomplete="off" enterkeyhint="search">
+          <button class="btn btn-yellow" type="submit">Show bikes</button>
+        </form>
+        <div class="hero-styles" aria-label="Browse by riding style">
+          <button type="button" data-hero-style="Adventure">Adventure</button>
+          <button type="button" data-hero-style="Sport">Sport</button>
+          <button type="button" data-hero-style="Touring">Touring</button>
+          <button type="button" data-hero-style="Cruiser">Cruiser</button>
+          <button type="button" data-hero-style="Naked">Naked</button>
         </div>
       </div>
+
+      <!-- the bike in the 3D section below, as a teaser -->
+      <a class="hero-feature" href="#rr-title">
+        <img src="assets/bikes/473180.webp" alt="" width="584" height="355" decoding="async">
+        <span class="hero-feature-text">
+          <span class="hero-feature-tag">Just in</span>
+          <strong>2024 BMW S1000 RR</strong>
+          <span><span data-rr-price>R299,900</span>, <span data-rr-km>15,448 km</span></span>
+        </span>
+      </a>
     </section>
 
-    <!-- SCROLL SHOWCASE: bike image stays static, features reveal on scroll -->
-    <section class="scroll-showcase" data-scroll-showcase aria-labelledby="showcase-title">
-      <!-- Bike Image (static) -->
-      <div class="bike-container">
-        <img class="bike-image" src="assets/bikes/464215.webp" alt="Sports Bike" data-bike-image>
-      </div>
+    <!-- 3D BIKE: the S1000 RR on the floor, as a 3D model that flies between the four slots below as you scroll
+         (assets/bike3d.js). The cut-out photos are the fallback: they show until the model loads, and stay
+         if it can't (reduced motion, no WebGL, model file missing). Live price and mileage come from
+         data/stock.json via app.js, keyed on data-rr-bike. -->
+    <div class="rr" data-rr data-rr-bike="473180">
+      <canvas class="rr-canvas" data-rr-canvas aria-hidden="true"></canvas>
 
-      <!-- Feature Sections that reveal on scroll -->
-      <div class="features-wrapper">
-        <div class="feature" data-feature="1">
-          <div class="feature-number">01</div>
-          <div class="feature-content">
-            <h3>Power</h3>
-            <p class="feature-value">180HP</p>
-            <p class="feature-desc">High-performance engine delivering raw power for the ultimate riding experience.</p>
+      <section class="rr-stage" aria-labelledby="rr-title">
+        <p class="rr-kicker"><span class="rr-dot" aria-hidden="true"></span>On the floor now</p>
+        <h2 id="rr-title" class="rr-giant"><span class="sr">2024 BMW </span><span aria-hidden="true">S1000RR</span><span class="sr">S 1000 RR</span></h2>
+        <div class="rr-slot rr-slot-1" data-rr-slot>
+          <img class="rr-flat" src="assets/bikes/473180.webp" alt="" width="584" height="355" decoding="async">
+          <span class="rr-load" data-rr-load aria-hidden="true"></span>
+        </div>
+        <dl class="rr-specs">
+          <div><dt>Power</dt><dd>207<small>hp</small></dd></div>
+          <div><dt>Engine</dt><dd>999<small>cc</small></dd></div>
+          <div><dt>Year</dt><dd>2024</dd></div>
+          <div><dt>Price</dt><dd data-rr-price>R299,900</dd></div>
+        </dl>
+        <p class="rr-hint" aria-hidden="true">Scroll to walk around it <span>↓</span></p>
+      </section>
+
+      <section class="rr-features" aria-label="What makes the S1000 RR">
+        <div class="rr-col">
+          <article class="rr-card">
+            <h3>ShiftCam four</h3>
+            <p>A 999&nbsp;cc inline-four making 152&nbsp;kW. Variable valve timing gives it pull low down for the road and a savage top end for the track.</p>
+          </article>
+          <article class="rr-card">
+            <h3>Built to lean</h3>
+            <p>An aluminium frame that leans on the engine as part of the chassis, so it turns in sharp and stays planted mid-corner.</p>
+          </article>
+        </div>
+        <div class="rr-slot rr-slot-2" data-rr-slot>
+          <img class="rr-flat" src="assets/bikes/473180.webp" alt="" width="584" height="355" loading="lazy" decoding="async">
+        </div>
+        <div class="rr-col">
+          <article class="rr-card">
+            <h3>Rider aids</h3>
+            <p>Riding modes, traction control and cornering ABS let you dial it from a wet commute to a track day.</p>
+          </article>
+          <article class="rr-card">
+            <h3>Current shape</h3>
+            <p>A 2024 bike from the current RR generation, with <span data-rr-km>15,448 km</span> on the clock. Inspected and ready to ride away.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="rr-showcase" aria-labelledby="rr-show-title">
+        <div class="rr-slot rr-slot-3" data-rr-slot>
+          <img class="rr-flat" src="assets/bikes/473180.webp" alt="" width="584" height="355" loading="lazy" decoding="async">
+        </div>
+        <div class="rr-show-copy">
+          <p class="rr-sub">Stock no. 101_4263</p>
+          <h2 id="rr-show-title" class="rr-show-title">Litre-class,<br>priced up front.</h2>
+          <p class="rr-show-text">A current-generation superbike with partial service history, on our Boksburg floor today. Ride it home, or put it on finance and keep the cash.</p>
+          <dl class="rr-show-specs">
+            <div><dt>Mileage</dt><dd data-rr-km>15,448 km</dd></div>
+            <div><dt>Gearbox</dt><dd>6-speed</dd></div>
+            <div><dt>Finance</dt><dd><span data-rr-monthly>R5,614</span><small> /mo*</small></dd></div>
+          </dl>
+          <div class="rr-show-ctas">
+            <button class="btn btn-yellow btn-lg" type="button" data-rr-open>See every photo →</button>
+            <a class="btn btn-ghost btn-lg" data-rr-wa href="https://wa.me/27642970282?text=Hi%20TRD%2C%20I%27m%20interested%20in%20the%202024%20BMW%20S1000%20RR%20(stock%20no.%20101_4263)." target="_blank" rel="noopener">WhatsApp about it</a>
           </div>
+          <p class="rr-fine">*Estimate, subject to approval.</p>
         </div>
+      </section>
 
-        <div class="feature" data-feature="2">
-          <div class="feature-number">02</div>
-          <div class="feature-content">
-            <h3>Acceleration</h3>
-            <p class="feature-value">0-100KM/H</p>
-            <p class="feature-value small">2.9 Sec</p>
-            <p class="feature-desc">Lightning-fast acceleration that pins you to the seat from the moment you twist the throttle.</p>
-          </div>
+      <section class="rr-finale" aria-labelledby="rr-finale-title">
+        <p class="rr-sub">Come see it in person</p>
+        <h2 id="rr-finale-title" class="rr-finale-title">Let's ride.</h2>
+        <div class="rr-slot rr-slot-4" data-rr-slot>
+          <img class="rr-flat" src="assets/bikes/473180.webp" alt="" width="584" height="355" loading="lazy" decoding="async">
         </div>
-
-        <div class="feature" data-feature="3">
-          <div class="feature-number">03</div>
-          <div class="feature-content">
-            <h3>Aerodynamics</h3>
-            <p class="feature-desc">Carbon fiber bodywork and precision-engineered fairings slice through the wind with minimal drag.</p>
-          </div>
+        <div class="rr-finale-ctas">
+          <a class="btn btn-yellow btn-lg" href="https://wa.me/27642970282?text=Hi%20TRD%2C%20I%27d%20like%20to%20book%20a%20viewing%20of%20the%20BMW%20S1000%20RR." target="_blank" rel="noopener">Book a viewing</a>
+          <a class="btn btn-ghost btn-lg" href="#stock">Browse all stock</a>
         </div>
-
-        <div class="feature" data-feature="4">
-          <div class="feature-number">04</div>
-          <div class="feature-content">
-            <h3>Technology</h3>
-            <p class="feature-desc">Advanced traction control, ABS, and ride-by-wire throttle for total control in any condition.</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- Specs Dashboard -->
-      <div class="specs-dashboard">
-        <div class="spec-item">
-          <div class="spec-label">Top Speed</div>
-          <div class="spec-value">299<span class="spec-unit">KM/H</span></div>
-        </div>
-        <div class="spec-item">
-          <div class="spec-label">Engine</div>
-          <div class="spec-value">1000<span class="spec-unit">cc</span></div>
-        </div>
-        <div class="spec-item">
-          <div class="spec-label">Weight</div>
-          <div class="spec-value">201<span class="spec-unit">kg</span></div>
-        </div>
-        <div class="spec-item price">
-          <div class="spec-label">Price</div>
-          <div class="spec-value">R 189,900</div>
-        </div>
-      </div>
-
-      <!-- CTA -->
-      <div class="showcase-cta">
-        <a class="btn btn-yellow btn-lg" href="#stock">Explore Now →</a>
-      </div>
-    </section>
+      </section>
+    </div>
 
     <!-- STYLES -->
     <section class="styles" id="styles" aria-labelledby="styles-title">
@@ -242,24 +279,116 @@
         </dl>
         <a class="btn btn-yellow btn-lg" href="https://www.google.com/maps/dir/?api=1&amp;destination=V-Max+Square+Atlas+Rd+Boksburg" target="_blank" rel="noopener">Get directions</a>
       </div>
-      <div class="visit-map">
-        <iframe title="Map of TRD Motorcycles, V-Max Square, Boksburg" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-          src="https://www.google.com/maps?q=V-Max+Square,+Atlas+Rd,+Boksburg&amp;z=15&amp;output=embed"></iframe>
+      <!-- MAP: Google sets cookies, so the iframe only goes in once the visitor allows maps (assets/cookies.js) -->
+      <div class="visit-map" data-map>
+        <div class="map-consent" data-map-consent>
+          <svg class="map-pin" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11Z"/><circle cx="12" cy="10" r="2.4"/></svg>
+          <p class="map-consent-title">V-Max Square, Boksburg</p>
+          <p>The map comes from Google, which sets its own cookies when it loads.</p>
+          <div class="map-consent-btns">
+            <button class="btn btn-ink" type="button" data-map-load>Show the map</button>
+            <a class="btn btn-ghost" href="https://www.google.com/maps/search/?api=1&amp;query=V-Max+Square+Atlas+Rd+Boksburg" target="_blank" rel="noopener">Open in Google Maps</a>
+          </div>
+        </div>
+        <template data-map-frame>
+          <iframe title="Map of TRD Motorcycles, V-Max Square, Boksburg" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=V-Max+Square,+Atlas+Rd,+Boksburg&amp;z=15&amp;output=embed"></iframe>
+        </template>
       </div>
     </section>
   </main>
 
-  <footer class="footer">
+  <footer class="footer" aria-labelledby="footer-title">
+    <h2 id="footer-title" class="sr">TRD Motorcycles</h2>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a class="wordmark" href="#top" aria-label="TRD Motorcycles, back to top">TRD<span>Motorcycles</span></a>
+        <p>Pre-owned bikes in Boksburg, every one priced up front. We sell, buy, take trade-ins and arrange finance.</p>
+        <a class="btn btn-ink" href="https://wa.me/27642970282" target="_blank" rel="noopener"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20.5 5.3 16A8.5 8.5 0 1 1 8.4 19l-4.4 1.5Z"/></svg> WhatsApp 064 297 0282</a>
+      </div>
+      <nav class="footer-col" aria-labelledby="footer-shop">
+        <h3 id="footer-shop">Shop</h3>
+        <ul>
+          <li><a href="#stock">All bikes in stock</a></li>
+          <li><a href="#rr-title">Featured: BMW S1000 RR</a></li>
+          <li><a href="#sell">Sell or trade in</a></li>
+          <li><a href="#finance">Finance</a></li>
+          <li><a href="https://torque.seritisolutions.co.za/app/financeapplication?CompanyCode=TDRM&amp;UniqueCode=A82F4248-1F38-4169-B2A6-9067A79F3696" target="_blank" rel="noopener">Apply for finance</a></li>
+        </ul>
+      </nav>
+      <nav class="footer-col" aria-labelledby="footer-styles">
+        <h3 id="footer-styles">Riding styles</h3>
+        <ul>
+          <li><button type="button" data-hero-style="Adventure">Adventure</button></li>
+          <li><button type="button" data-hero-style="Sport">Sport</button></li>
+          <li><button type="button" data-hero-style="Touring">Touring</button></li>
+          <li><button type="button" data-hero-style="Cruiser">Cruiser</button></li>
+          <li><button type="button" data-hero-style="Naked">Naked</button></li>
+        </ul>
+      </nav>
+      <div class="footer-col">
+        <h3>Visit</h3>
+        <address>Unit 1, V-Max Square<br>Cnr Atlas Rd &amp; North Rand Rd<br>Boksburg, Gauteng, 1477</address>
+        <ul>
+          <li><a href="tel:+27110519104">(011) 051 9104</a></li>
+          <li><a href="mailto:admin@trdmotorcycles.co.za">admin@trdmotorcycles.co.za</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-social">
+      <a href="https://www.instagram.com/trdmotorcyclesrsa/" target="_blank" rel="noopener" aria-label="TRD on Instagram">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r=".6" fill="currentColor"/></svg>
+      </a>
+      <a href="https://www.facebook.com/TRDMotorcyclesRSA/" target="_blank" rel="noopener" aria-label="TRD on Facebook">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 21v-7.5h2.6l.4-3h-3V8.6c0-.9.3-1.5 1.6-1.5h1.5V4.4a20 20 0 0 0-2.3-.1c-2.3 0-3.8 1.4-3.8 3.9v2.3H8.9v3h2.6V21"/></svg>
+      </a>
+      <a href="https://www.tiktok.com/@trdmotorcyclesrsa" target="_blank" rel="noopener" aria-label="TRD on TikTok">
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3.5v11.2a3.3 3.3 0 1 1-3.3-3.3"/><path d="M14 3.5c.4 2.6 2.2 4.3 4.8 4.5"/></svg>
+      </a>
+    </div>
+
     <p class="footer-mark" aria-hidden="true">TRD</p>
+
     <div class="footer-row">
-      <p>© TRD Motorcycles (Pty) Ltd, Boksburg</p>
+      <p>© <span data-year>2026</span> TRD Motorcycles (Pty) Ltd, Boksburg</p>
       <p class="footer-links">
-        <a href="https://www.instagram.com/trdmotorcyclesrsa/" target="_blank" rel="noopener">Instagram</a>
-        <a href="https://www.facebook.com/TRDMotorcyclesRSA/" target="_blank" rel="noopener">Facebook</a>
-        <a href="https://www.tiktok.com/@trdmotorcyclesrsa" target="_blank" rel="noopener">TikTok</a>
+        <button type="button" data-cookie-settings>Cookie settings</button>
+        <a href="#top">Back to top</a>
       </p>
     </div>
+    <p class="footer-credit">3D model: <a href="https://sketchfab.com/3d-models/bmw-s1000-rr-1873aed292d6465694119bd81860a0c2" target="_blank" rel="noopener">"BMW S1000 RR" by VTX_car</a>, licensed <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a>.</p>
   </footer>
+
+  <!-- COOKIES: banner on the first visit, settings from the footer. Logic in assets/cookies.js -->
+  <section class="cookies" data-cookies aria-labelledby="cookies-title" hidden>
+    <h2 id="cookies-title">Cookies on this site</h2>
+    <p>We use one cookie to remember your choice. The Google map in "Visit us" sets Google's own cookies, so it only loads if you allow it.</p>
+    <div class="cookies-btns">
+      <button class="btn btn-ink" type="button" data-consent="all">Allow all</button>
+      <button class="btn btn-ghost" type="button" data-consent="essential">Essential only</button>
+      <button class="cookies-more" type="button" data-cookie-settings>Choose</button>
+    </div>
+  </section>
+
+  <dialog class="cookie-dialog" data-cookie-dialog aria-labelledby="cookie-dialog-title">
+    <form method="dialog" data-cookie-form>
+      <h2 id="cookie-dialog-title">Cookie settings</h2>
+      <p>Choose what this site can load. You can change this any time from "Cookie settings" at the bottom of the page.</p>
+      <div class="cookie-row">
+        <span><strong>Essential</strong>One first-party cookie that remembers this choice. Always on.</span>
+        <input class="switch" type="checkbox" checked disabled aria-label="Essential cookies, always on">
+      </div>
+      <label class="cookie-row">
+        <span><strong>Maps</strong>Loads the Google map with our location. Google sets its own cookies when it loads.</span>
+        <input class="switch" type="checkbox" name="maps">
+      </label>
+      <div class="cookie-dialog-btns">
+        <button class="btn btn-ink" type="submit" value="save">Save choices</button>
+        <button class="btn btn-ghost" type="submit" value="all">Allow all</button>
+      </div>
+    </form>
+  </dialog>
 
   <!-- BIKE DETAIL -->
   <dialog class="detail" data-detail aria-labelledby="detail-title" tabindex="-1">
@@ -311,6 +440,7 @@
   <p class="toast" data-toast role="status" aria-live="polite"></p>
 
   <script src="assets/app.js"></script>
-  <script src="assets/scroll-showcase.js"></script>
+  <script src="assets/cookies.js"></script>
+  <script type="module" src="assets/bike3d.js"></script>
 </body>
 </html>

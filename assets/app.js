@@ -148,12 +148,15 @@
   menu.addEventListener("click", (e) => { if (e.target.closest("a")) setMenu(false); });
   addEventListener("keydown", (e) => { if (e.key === "Escape" && !menu.hidden) { setMenu(false); menuBtn.focus(); } });
 
+  // the nav bar goes dark while it sits over the hero footage
+  const night = $("[data-rr]");
   let tick = 0;
   function onScroll() {
     tick = 0;
     const p = Math.min(1, scrollY / Math.max(1, hero.offsetHeight));
     hero.style.setProperty("--p", reduceMotion.matches ? 0 : p.toFixed(4));
     nav.classList.toggle("scrolled", scrollY > 40);
+    nav.classList.toggle("on-dark", hero.getBoundingClientRect().bottom > nav.offsetHeight / 2);
   }
   addEventListener("scroll", () => { if (!tick) tick = requestAnimationFrame(onScroll); }, { passive: true });
   onScroll();
@@ -267,10 +270,7 @@
     $("[data-styles-list]").addEventListener("click", (e) => {
       const btn = e.target.closest("[data-style-pick]");
       if (!btn) return;
-      showStock(() => {
-        const radio = form.querySelector(`input[name="style"][value="${CSS.escape(btn.dataset.stylePick)}"]`);
-        if (radio) radio.checked = true;
-      });
+      pickStyle(btn.dataset.stylePick);
     });
   }
 
@@ -407,6 +407,42 @@
     touchX = null;
   });
 
+  $("[data-year]").textContent = new Date().getFullYear();
+
+  // ---------- hero search and style shortcuts ----------
+  const pickStyle = (style) => showStock(() => {
+    const radio = form.querySelector(`input[name="style"][value="${CSS.escape(style)}"]`);
+    if (radio) radio.checked = true;
+  });
+  $("[data-hero-search]").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const q = e.target.q.value.trim();
+    showStock(() => (form.q.value = q));
+  });
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest("[data-hero-style]");
+    if (btn) pickStyle(btn.dataset.heroStyle);
+  });
+
+  // ---------- 3D bike section: live price, mileage and finance for the bike it shows ----------
+  function showcaseBike() {
+    if (!night) return;
+    const b = bikes.find((x) => x.id === night.dataset.rrBike);
+    const open = $("[data-rr-open]");
+    if (!b) {
+      // sold: keep the showcase, point it at the rest of the floor
+      document.querySelectorAll("[data-rr-price]").forEach((el) => (el.textContent = "Sold"));
+      open.textContent = "See what's on the floor →";
+      open.addEventListener("click", () => $("#stock").scrollIntoView({ behavior: reduceMotion.matches ? "auto" : "smooth" }));
+      return;
+    }
+    document.querySelectorAll("[data-rr-price]").forEach((el) => (el.textContent = b.price ? money(b.price) : "Ask us"));
+    if (b.mileage_km != null) document.querySelectorAll("[data-rr-km]").forEach((el) => (el.textContent = km(b.mileage_km)));
+    if (b.monthly_installment) night.querySelectorAll("[data-rr-monthly]").forEach((el) => (el.textContent = money(b.monthly_installment)));
+    $("[data-rr-wa]").href = waLink(askAbout(b));
+    open.addEventListener("click", () => openBike(b.id));
+  }
+
   ready
     .then((rows) => {
       bikes = rows;
@@ -415,6 +451,8 @@
       render();
       const monthly = bikes.map((b) => b.monthly_installment).filter(Boolean);
       if (monthly.length) $("[data-min-monthly]").textContent = money(Math.min(...monthly));
+      $("[data-hero-count]").textContent = bikes.length;
+      showcaseBike();
       const m = location.hash.match(/^#bike-(.+)$/);
       if (m) openBike(m[1]);
     })
