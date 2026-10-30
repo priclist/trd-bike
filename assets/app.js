@@ -159,11 +159,13 @@
   addEventListener("keydown", (e) => { if (e.key === "Escape" && !menu.hidden) { setMenu(false); menuBtn.focus(); } });
 
   let tick = 0;
-  const hero = $("[data-hero]");
+  // the page alternates dark and light bands; the nav goes dark over the hero and every dark band
+  const darkBands = [...document.querySelectorAll("[data-hero], .band-dark, .footer")];
   function onScroll() {
     tick = 0;
+    const y = nav.offsetHeight / 2;
     nav.classList.toggle("scrolled", scrollY > 40);
-    nav.classList.toggle("on-dark", !!hero && scrollY < hero.offsetHeight - nav.offsetHeight);
+    nav.classList.toggle("on-dark", darkBands.some((el) => { const r = el.getBoundingClientRect(); return r.top <= y && r.bottom > y; }));
   }
   addEventListener("scroll", () => { if (!tick) tick = requestAnimationFrame(onScroll); }, { passive: true });
   onScroll();
@@ -216,10 +218,13 @@
           ${b.engine_cc ? `<li>${num(b.engine_cc)} cc</li>` : ""}
           ${b.power_kw ? `<li>${num(b.power_kw)} kW</li>` : ""}
         </ul>
-        <a class="btn btn-wa" href="${esc(waLink(askAbout(b)))}" target="_blank" rel="noopener">
-          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20.5 5.3 16A8.5 8.5 0 1 1 8.4 19l-4.4 1.5Z"/></svg>
-          WhatsApp about this bike<span class="sr">: ${esc(b.title)}</span>
-        </a>
+        <div class="bike-ctas">
+          <span class="btn btn-red bike-view" aria-hidden="true">View bike</span>
+          <a class="btn btn-wa" href="${esc(waLink(askAbout(b)))}" target="_blank" rel="noopener">
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20.5 5.3 16A8.5 8.5 0 1 1 8.4 19l-4.4 1.5Z"/></svg>
+            WhatsApp<span class="sr"> about the ${esc(b.title)}</span>
+          </a>
+        </div>
       </li>`;
   }
 

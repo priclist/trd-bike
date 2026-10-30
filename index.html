@@ -25,8 +25,8 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,600;0,700;1,800;1,900&family=DM+Sans:ital,opsz,wght@0,9..40,400..800;1,9..40,500..800&display=swap" rel="stylesheet">
-  <link rel="preload" as="image" href="assets/video/hero-poster.jpg" fetchpriority="high">
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,500;0,600;0,700;0,800;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link rel="preload" as="image" href="assets/gallery/3101.webp" fetchpriority="high">
   <link rel="stylesheet" href="assets/styles.css">
 
   <script type="application/ld+json">
@@ -40,10 +40,10 @@
 <body>
   <a class="skip" href="#stock">Skip to stock</a>
 
-  <!-- NAV: logo, glass pill of sections, app button (ClassroomX layout) -->
+  <!-- NAV: logo, glass pill of sections, WhatsApp -->
   <header class="nav" data-nav>
     <a class="nav-logo" href="#top" aria-label="TRD Motorcycles home">
-      <img src="assets/brand/logo.webp" alt="TRD Motorcycles" width="900" height="261">
+      <img src="assets/brand/logo.svg" alt="TRD Motorcycles" width="360" height="104">
     </a>
     <nav class="nav-pill" aria-label="Main">
       <a href="#top">Home</a>
@@ -55,7 +55,7 @@
       <a href="#visit">Visit</a>
     </nav>
     <div class="nav-right">
-      <a class="btn btn-red btn-sm nav-app" href="#app">Get the app</a>
+      <a class="btn btn-red btn-sm nav-wa" href="https://wa.me/27642970282?text=Hi%20TRD%2C%20" target="_blank" rel="noopener"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20.5 5.3 16A8.5 8.5 0 1 1 8.4 19l-4.4 1.5Z"/></svg>WhatsApp us</a>
       <button class="menu-btn" type="button" data-menu aria-expanded="false" aria-controls="menu">
         <span class="sr">Menu</span><i></i><i></i>
       </button>
@@ -73,7 +73,7 @@
       <a href="#visit">Visit</a>
       <a href="#app">Get the app</a>
     </nav>
-    <p class="menu-foot"><a href="tel:+27110519104">(011) 051 9104</a><a href="sales/">Sales team sign in</a></p>
+    <p class="menu-foot"><a href="tel:+27110519104">(011) 051 9104</a><a href="https://wa.me/27642970282" target="_blank" rel="noopener">WhatsApp 064 297 0282</a></p>
   </div>
 
   <main id="top">
@@ -94,12 +94,10 @@
           </div>
         </div>
 
-        <!-- the track clip, looping forever, in a panel with a raked edge; a card cycles through real bikes on the floor -->
+        <!-- the real showroom floor in a panel with a raked edge; a card cycles through bikes on it -->
         <div class="hx-media">
           <div class="hx-panel">
-            <video class="hero-video" data-hero-video autoplay muted loop playsinline disablepictureinpicture preload="auto" aria-hidden="true"
-              poster="assets/video/hero-poster.jpg"
-              data-src-webm="assets/video/hero.webm" data-src-mp4="assets/video/hero.mp4" data-src-mobile="assets/video/hero-mobile.mp4"></video>
+            <img class="hero-photo" src="assets/gallery/3101.webp" alt="Rows of superbikes on the TRD showroom floor in Boksburg" width="1600" height="1066" fetchpriority="high" decoding="async">
           </div>
           <button class="hx-floor" type="button" data-hx-floor hidden>
             <small>On the floor now</small>
@@ -118,21 +116,21 @@
     </section>
 
     <!-- BRANDS -->
-    <div class="marquee" aria-label="Brands on the floor">
-      <div class="marquee-track" data-marquee></div>
+    <div class="marquee band-dark">
+      <p class="sr" data-marquee-sr>Brands on the floor</p>
+      <div class="marquee-track" data-marquee aria-hidden="true"></div>
     </div>
 
-    <!-- SPOTLIGHT: sticky stage, the bike and its numbers change as you scroll -->
-    <section class="spotlight" data-spotlight aria-labelledby="spot-title">
-      <div class="spot-stage">
-        <header class="spot-head">
+    <!-- HEADLINERS: three standout bikes, a row on desktop and a swipe rail on phones -->
+    <section class="section headliners band-dark" id="headliners" aria-labelledby="spot-title" data-headliners hidden>
+      <header class="head head-row">
+        <div>
           <p class="kicker">Headliners</p>
-          <h2 id="spot-title">The big ones<br>on the floor.</h2>
-        </header>
-        <div class="spot-bikes" data-spot-bikes></div>
-        <div class="spot-info" data-spot-info aria-live="polite"></div>
-        <ol class="spot-dots" data-spot-dots aria-hidden="true"></ol>
-      </div>
+          <h2 id="spot-title">The big ones <em>on the floor.</em></h2>
+        </div>
+        <p class="lead">The pick of this week's floor. Every one checked, priced and ready to ride out.</p>
+      </header>
+      <ul class="head-rail" data-headliner-list></ul>
     </section>
 
     <!-- STYLES -->
@@ -205,13 +203,13 @@
     </section>
 
     <!-- GEAR: the riding-kit mosaic from the TRD shop -->
-    <section class="section gear" id="gear" aria-labelledby="gear-title">
+    <section class="section gear band-dark" id="gear" aria-labelledby="gear-title">
       <header class="head head-row">
         <div>
           <p class="kicker">Riding gear</p>
           <h2 id="gear-title">Kit up before<br>you ride <em>out.</em></h2>
         </div>
-        <p class="lead">Helmets, jackets, gloves, pants and boots in the shop next to the floor. Tap a category and we'll tell you what's on the rail in your size.</p>
+        <p class="lead">Helmets, jackets, gloves, pants, boots and oils in our own shop next to the floor. Tap one and we'll tell you what's on the rail in your size.</p>
       </header>
       <ul class="gear-grid" data-gear></ul>
 
@@ -256,55 +254,19 @@
       <ul class="team-grid" data-team></ul>
     </section>
 
-    <!-- APP -->
+    <!-- APP: a small strip, buyers come for bikes first -->
     <section class="section app" id="app" aria-labelledby="app-title">
-      <div class="app-card app-riders">
-        <div class="app-copy">
-          <p class="kicker">The TRD app</p>
-          <h2 id="app-title">TRD in your <em>pocket.</em></h2>
-          <p class="lead">Add TRD to your home screen. The whole floor opens in a tap, full screen, even on a weak signal.</p>
-          <div class="app-ctas">
-            <button class="btn btn-red btn-lg" type="button" data-install>
-              <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></svg>
-              <span data-install-label>Install the app</span>
-            </button>
-          </div>
-          <p class="app-hint" data-install-hint hidden></p>
-        </div>
-        <!-- a hand holding an iPhone (same photo as the ClassroomX hero); the TRD app screen is drawn over its
-             black screen so it stays sharp, and real stock slides down as notifications -->
-        <div class="hp" aria-hidden="true" data-hand-phone>
-          <img class="hp-photo" src="assets/brand/hand-phone.webp" alt="" width="1332" height="1844" loading="lazy" decoding="async" draggable="false">
-          <div class="hp-screen">
-            <div class="hp-app">
-              <img class="hp-logo" src="assets/brand/logo.webp" alt="">
-              <p class="hp-h">On the <em>floor.</em></p>
-              <div class="hp-chips"><span class="on">All</span><span>Sport</span><span>Adventure</span><span>Naked</span></div>
-              <div class="phone-cards" data-phone-cards></div>
-            </div>
-            <span class="hp-time" data-hp-time>9:41</span>
-            <span class="hp-island"></span>
-            <span class="hp-icons">
-              <svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
-              <span class="hp-battery"><i></i></span>
-            </span>
-            <div class="hp-note" data-hp-note>
-              <img src="icons/icon-192.png" alt="">
-              <span><b data-hp-note-title>TRD Motorcycles</b><small data-hp-note-text></small></span>
-            </div>
-            <span class="hp-home"></span>
-          </div>
-        </div>
-      </div>
-      <a class="app-card app-sales" href="sales/">
-        <img src="icons/sales-192.png" alt="" width="72" height="72">
+      <div class="app-strip">
+        <img src="icons/icon-192.png" alt="" width="64" height="64" loading="lazy">
         <div>
-          <p class="kicker">For the TRD team</p>
-          <h3>The sales app</h3>
-          <p>Download it, sign in and post new arrivals, showroom shots and handovers straight to this site.</p>
+          <h2 id="app-title">Get the TRD app</h2>
+          <p>The whole floor on your home screen. Opens in a tap, even on a weak signal.</p>
         </div>
-        <span class="go" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12h14m-5-5 5 5-5 5"/></svg></span>
-      </a>
+        <button class="btn btn-ink" type="button" data-install>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></svg>
+          <span data-install-label>Install</span>
+        </button>
+      </div>
     </section>
 
     <!-- SELL / TRADE-IN -->
@@ -368,7 +330,7 @@
   <footer class="footer">
     <div class="footer-top">
       <div class="footer-brand">
-        <img class="footer-logo" src="assets/brand/logo.webp" alt="TRD Motorcycles" loading="lazy" width="900" height="261">
+        <img class="footer-logo" src="assets/brand/logo.svg" alt="TRD Motorcycles" loading="lazy" width="360" height="104">
         <p>Pre-owned bikes, riding gear and finance on one showroom floor in Boksburg.</p>
         <a class="btn btn-red" href="https://wa.me/27642970282" target="_blank" rel="noopener">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20.5 5.3 16A8.5 8.5 0 1 1 8.4 19l-4.4 1.5Z"/></svg>
@@ -387,7 +349,6 @@
         <a href="#showroom">The showroom</a>
         <a href="#team" data-team-link hidden>The team</a>
         <a href="#app">Get the app</a>
-        <a href="sales/">Sales team sign in</a>
       </nav>
       <div class="footer-col">
         <h2>Visit</h2>
@@ -470,28 +431,22 @@
     <p class="gallery-count" data-lb-count></p>
   </dialog>
 
-  <!-- COOKIES: same card as ClassroomX, bottom left -->
-  <section class="cookies" data-cookies role="dialog" aria-labelledby="cookies-title" hidden>
+  <!-- COOKIES: a thin bar along the bottom -->
+  <section class="cookies" data-cookies role="region" aria-labelledby="cookies-title" hidden>
     <h2 id="cookies-title" class="sr">Cookies</h2>
-    <button class="cookies-x" type="button" data-cookie-choice="reject" aria-label="Close and reject optional cookies">
-      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
-    </button>
-    <p>Essential cookies keep the site and the sales app working and are always on. With your OK we also load Google Maps on the Visit section, which sets its own cookies.</p>
+    <p>We use essential cookies. Allow Google Maps on the Visit section too?</p>
     <div class="cookies-prefs" data-cookie-prefs hidden>
-      <label class="pref"><span><b>Essential</b><small>Sign-in for the sales team, your cookie choice</small></span><input type="checkbox" checked disabled><i aria-hidden="true"></i></label>
+      <label class="pref"><span><b>Essential</b><small>Always on</small></span><input type="checkbox" checked disabled><i aria-hidden="true"></i></label>
       <label class="pref"><span><b>Maps</b><small>Google Maps on the Visit section</small></span><input type="checkbox" data-cookie-maps><i aria-hidden="true"></i></label>
     </div>
     <div class="cookies-actions">
-      <button class="btn btn-glass" type="button" data-cookie-settings>Cookie settings</button>
-      <button class="btn btn-ink" type="button" data-cookie-choice="reject">Reject all</button>
-      <button class="btn btn-ink" type="button" data-cookie-choice="accept">Accept all</button>
-      <button class="btn btn-ink" type="button" data-cookie-choice="save" hidden>Save choices</button>
+      <button class="link" type="button" data-cookie-settings>Settings</button>
+      <button class="btn btn-line btn-sm" type="button" data-cookie-choice="reject">Essential only</button>
+      <button class="btn btn-red btn-sm" type="button" data-cookie-choice="accept">Allow maps</button>
+      <button class="btn btn-red btn-sm" type="button" data-cookie-choice="save" hidden>Save</button>
     </div>
   </section>
 
-  <a class="wa-fab" href="https://wa.me/27642970282?text=Hi%20TRD%2C%20" target="_blank" rel="noopener" data-wa-fab aria-label="WhatsApp TRD Motorcycles">
-    <svg viewBox="0 0 32 32" aria-hidden="true"><path fill="currentColor" d="M16 3a13 13 0 0 0-11.2 19.6L3 29l6.6-1.7A13 13 0 1 0 16 3Zm0 23.7a10.7 10.7 0 0 1-5.5-1.5l-.4-.2-3.9 1 1-3.8-.2-.4A10.7 10.7 0 1 1 16 26.7Zm5.9-8c-.3-.2-1.9-.9-2.2-1s-.5-.2-.7.2-.8 1-1 1.2-.4.2-.7.1a8.8 8.8 0 0 1-4.4-3.8c-.3-.6.3-.5.9-1.7.1-.2 0-.4 0-.5l-1-2.4c-.3-.6-.5-.5-.7-.5h-.6a1.2 1.2 0 0 0-.9.4 3.7 3.7 0 0 0-1.1 2.7 6.4 6.4 0 0 0 1.3 3.4 14.7 14.7 0 0 0 5.6 5c2.1.9 2.9 1 4 .8a3.4 3.4 0 0 0 2.2-1.6 2.8 2.8 0 0 0 .2-1.6c-.1-.1-.3-.2-.6-.4Z"/></svg>
-  </a>
   <!-- INSTALL: shown when the browser has no install prompt of its own (iPhone Safari, Firefox, plain http) -->
   <div class="install-dlg" data-install-dlg role="dialog" aria-modal="true" aria-labelledby="install-title" hidden>
     <div class="install-card">
