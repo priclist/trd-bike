@@ -748,7 +748,8 @@ button.post-photo { cursor: pointer; }
 .thumbs button { flex: none; width: 88px; aspect-ratio: 3 / 2; padding: 0; border: 0; border-radius: 10px; overflow: hidden; background: #fff; cursor: pointer; opacity: .5; transition: opacity 160ms ease; box-shadow: inset 0 0 0 2px transparent; }
 .thumbs button[aria-current="true"] { opacity: 1; outline: 2px solid var(--red); outline-offset: -2px; }
 .thumbs img { width: 100%; height: 100%; object-fit: cover; }
-.detail-info { overflow-y: auto; padding: clamp(28px, 3.4vw, 48px); }
+/* no bottom padding: sticky offsets count from inside the scroller's padding, so the action bar would float above the edge */
+.detail-info { --pad: clamp(24px, 3.4vw, 48px); overflow-y: auto; overscroll-behavior: contain; padding: var(--pad) var(--pad) 0; }
 .detail-tags { display: flex; gap: 8px; margin-bottom: 18px; }
 .style-tag { padding: 6px 11px; border-radius: 999px; background: var(--fill); font-size: .82rem; }
 .detail .special-tag, .detail .just-tag { position: static; }
@@ -756,8 +757,18 @@ button.post-photo { cursor: pointer; }
 .detail-info h2 { font-size: clamp(2rem, 3.4vw, 3.2rem); margin-right: 90px; }
 .detail-price { margin: 20px 0 6px; font: 600 2.4rem/1 var(--display); letter-spacing: -.045em; color: var(--accent-ink); }
 .detail-price s { margin-left: 12px; font: 400 1.05rem var(--body); letter-spacing: 0; color: var(--dim); }
-.detail-monthly { margin: 0; color: var(--muted); }
-.detail-ctas { display: flex; flex-wrap: wrap; gap: 10px; margin: 26px 0 30px; }
+.detail-monthly { margin: 0 0 28px; color: var(--muted); text-wrap: pretty; }
+.detail-ctas {
+  position: sticky; bottom: 0; z-index: 2; display: flex; gap: 10px;
+  margin: 32px calc(-1 * var(--pad)) 0;
+  padding: 14px var(--pad) calc(14px + env(safe-area-inset-bottom));
+  background: color-mix(in srgb, var(--bg-2) 82%, transparent); box-shadow: 0 -1px 0 var(--line);
+  -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%);
+}
+.detail-ctas .btn { flex: 1 1 0; min-width: 0; padding: 0 20px; }
+.detail-ctas .btn-red { flex-grow: 1.7; }
+.detail-ctas svg { width: 22px; height: 22px; flex: none; }
+.detail-ctas .narrow { display: none; }
 .specs { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin: 0 0 30px; border-radius: 18px; overflow: hidden; background: var(--line); }
 .specs div { padding: 13px 16px; background: var(--bg); }
 .specs dt { color: var(--muted); font-size: .8rem; }
@@ -771,12 +782,26 @@ button.post-photo { cursor: pointer; }
 .similar strong { font-size: .9rem; font-weight: 600; line-height: 1.25; }
 .similar span { color: var(--muted); font-size: .88rem; }
 @media (max-width: 860px) {
-  .detail { width: 100vw; max-height: none; height: 100svh; margin: 0; border-radius: 0; }
-  .detail-body { display: block; height: 100%; overflow-y: auto; }
+  /* dvh, not svh: when Chrome's toolbar is scrolled away svh leaves a strip of backdrop under the sheet */
+  .detail { inset: 0; width: 100%; max-width: none; height: 100vh; height: 100dvh; max-height: none; margin: 0; border-radius: 0; }
+  .detail-body { display: block; height: 100%; overflow-y: auto; overscroll-behavior: contain; }
   .gallery-main { aspect-ratio: 3 / 2; flex: none; }
   .detail-top { top: max(14px, env(safe-area-inset-top)); }
-  .detail-info { overflow: visible; padding-bottom: calc(32px + env(safe-area-inset-bottom)); }
-  .detail-ctas .btn { flex: 1 1 100%; }
+  .gallery-nav { width: 40px; height: 40px; }
+  .thumbs { padding: 10px 12px; gap: 8px; scrollbar-width: none; scroll-padding-inline: 12px; }
+  .thumbs::-webkit-scrollbar { display: none; }
+  .thumbs button { width: 76px; border-radius: 12px; }
+  .detail-info { overflow: visible; }
+  .detail-info h2 { margin-right: 0; font-size: clamp(2.1rem, 9.4vw, 2.9rem); }
+  .detail-price { font-size: clamp(2.2rem, 10vw, 2.6rem); }
+  .similar ul { grid-template-columns: repeat(2, 1fr); }
+  .similar li:nth-child(3) { display: none; }
+}
+@media (max-width: 520px) {
+  .detail-ctas { gap: 8px; }
+  .detail-ctas .btn { padding: 0 16px; }
+  .detail-ctas .wide { display: none; }
+  .detail-ctas .narrow { display: inline; }
 }
 
 /* ---------- floating WhatsApp ---------- */

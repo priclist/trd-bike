@@ -1,6 +1,6 @@
 // TRD service worker: the site and the sales app open offline from the last visit.
 // Pages and stock are network-first (always fresh when online); images and code are cache-first.
-const VERSION = "trd-v15";
+const VERSION = "trd-v16";
 const SHELL = [
   "/", "/assets/styles.css", "/assets/app.js", "/assets/site.js", "/assets/install.js", "/assets/brand/logo.webp",
   "/sales/", "/sales/sales.css", "/sales/sales.js", "/manifest.webmanifest", "/sales/manifest.webmanifest",

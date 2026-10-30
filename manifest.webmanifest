@@ -2,21 +2,99 @@
   "id": "/",
   "name": "TRD Motorcycles",
   "short_name": "TRD",
-  "description": "Every pre-owned bike on the TRD Motorcycles floor in Boksburg, with photos, specs and prices.",
+  "description": "Every pre-owned bike on the TRD Motorcycles floor in Boksburg: photos, specs, prices and finance, one tap from WhatsApp.",
   "start_url": "/?source=app",
   "scope": "/",
   "display": "standalone",
   "background_color": "#f5f5f7",
   "theme_color": "#f5f5f7",
   "orientation": "portrait",
-  "categories": ["shopping", "lifestyle"],
+  "categories": [
+    "shopping",
+    "lifestyle"
+  ],
   "icons": [
-    { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
-    { "src": "/icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ],
   "shortcuts": [
-    { "name": "Stock", "url": "/#stock", "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }] },
-    { "name": "Sales team", "url": "/sales/", "icons": [{ "src": "/icons/sales-192.png", "sizes": "192x192" }] }
+    {
+      "name": "Stock",
+      "url": "/#stock",
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Sales team",
+      "url": "/sales/",
+      "icons": [
+        {
+          "src": "/icons/sales-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/icons/screenshots/phone-1-home.jpg",
+      "sizes": "1080x1920",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Twist the throttle: TRD's pre-owned superbikes in Boksburg"
+    },
+    {
+      "src": "/icons/screenshots/phone-2-stock.jpg",
+      "sizes": "1080x1920",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Every bike on the floor, priced up front"
+    },
+    {
+      "src": "/icons/screenshots/phone-3-bike.jpg",
+      "sizes": "1080x1920",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Photos, specs and finance for each bike"
+    },
+    {
+      "src": "/icons/screenshots/phone-4-styles.jpg",
+      "sizes": "1080x1920",
+      "type": "image/jpeg",
+      "form_factor": "narrow",
+      "label": "Pick how you ride"
+    },
+    {
+      "src": "/icons/screenshots/wide-1-home.jpg",
+      "sizes": "1920x1080",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "TRD Motorcycles on the desktop"
+    },
+    {
+      "src": "/icons/screenshots/wide-2-stock.jpg",
+      "sizes": "1920x1080",
+      "type": "image/jpeg",
+      "form_factor": "wide",
+      "label": "Filter the floor by make, price and engine"
+    }
   ]
 }
