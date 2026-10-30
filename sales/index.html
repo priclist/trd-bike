@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>TRD Sales</title>
+  <meta name="description" content="The TRD Motorcycles sales team app.">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#f5f5f7">
+  <meta name="color-scheme" content="light">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" href="../icons/sales-192.png">
+  <link rel="apple-touch-icon" href="../icons/sales-apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="TRD Sales">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..800;1,9..40,500..800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="sales.css">
+  <script src="../assets/install.js"></script>
+</head>
+<body>
+  <!-- WELCOME: download the app (first visit in a browser) -->
+  <section class="screen gate" data-screen="gate" hidden>
+    <svg class="ribbon ribbon-red" viewBox="0 0 600 700" aria-hidden="true"><path pathLength="1" d="M-80 120C180 60 420 180 380 360S90 560 160 640s300 40 420-60"/></svg>
+    <div class="gate-body">
+      <img class="app-icon" src="../icons/sales-512.png" alt="" width="112" height="112">
+      <p class="kicker">TRD Motorcycles</p>
+      <h1>The sales<br><em>app.</em></h1>
+      <p class="lead">Snap a bike as it rolls in and it's on the website before the customer has parked. Showroom shots, handovers and your profile, all from your phone.</p>
+      <ol class="steps">
+        <li><span><b>Download</b> the app to your home screen</span></li>
+        <li><span><b>Sign in</b> with the account your manager made</span></li>
+        <li><span><b>Post</b> photos straight to trdmotorcycles.co.za</span></li>
+      </ol>
+      <button class="btn btn-red btn-lg btn-block" type="button" data-install>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11m0 0-4-4m4 4 4-4M5 19h14"/></svg>
+        Download the app
+      </button>
+      <div class="ios-steps" data-ios-steps hidden>
+        <p><b>On iPhone:</b> tap <span class="kbd">Share <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V4m0 0L8 8m4-4 4 4"/><path d="M6 12v6.5A1.5 1.5 0 0 0 7.5 20h9a1.5 1.5 0 0 0 1.5-1.5V12"/></svg></span> in Safari, then <span class="kbd">Add to Home Screen</span>. Open TRD Sales from your home screen.</p>
+      </div>
+      <div class="ios-steps" data-other-steps hidden>
+        <p>Open your browser menu <span class="kbd">⋮</span> and choose <span class="kbd">Install app</span> or <span class="kbd">Add to Home screen</span>.</p>
+      </div>
+      <button class="link-btn" type="button" data-skip-gate>Continue in the browser</button>
+    </div>
+  </section>
+
+  <!-- SIGN IN -->
+  <section class="screen login" data-screen="login" hidden>
+    <div class="login-hero">
+      <!-- the website's track clip, looping; sales.js attaches the source -->
+      <video class="login-video" data-login-video autoplay muted loop playsinline disablepictureinpicture preload="auto"
+        poster="../assets/video/hero-poster.jpg" aria-hidden="true"
+        data-src-mobile="../assets/video/hero-mobile.mp4" data-src-mp4="../assets/video/hero.mp4"></video>
+      <div class="login-hero-top">
+        <span class="login-badge"><img src="../assets/brand/logo.webp" alt="TRD Motorcycles" width="900" height="261"></span>
+        <span class="login-pill">Sales team</span>
+      </div>
+      <p class="login-tag">Post it from the floor.<br>Live on the site in seconds.</p>
+    </div>
+    <form class="login-card" data-login novalidate>
+      <span class="sheet-grabber" aria-hidden="true"></span>
+      <h1>Sign <em>in.</em></h1>
+      <p class="muted" data-login-sub>Use the email your manager set up for you.</p>
+      <div class="welcome-back" data-welcome hidden>
+        <span data-welcome-av></span>
+        <div><b data-welcome-name></b><small data-welcome-email></small></div>
+        <button type="button" class="link-btn" data-not-me>Not you?</button>
+      </div>
+      <label class="field" data-email-field><span>Email</span><input type="email" name="email" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false" required></label>
+      <label class="field"><span>Password</span>
+        <span class="pw">
+          <input type="password" name="password" autocomplete="current-password" required>
+          <button type="button" class="pw-eye" data-pw-eye aria-label="Show password" aria-pressed="false">
+            <svg class="icon eye-open" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12Z"/><circle cx="12" cy="12" r="3"/></svg>
+            <svg class="icon eye-shut" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18M10.6 5.6A9.6 9.6 0 0 1 12 5.5c6 0 9.5 6.5 9.5 6.5a17 17 0 0 1-3 3.7M6.6 6.6A16.6 16.6 0 0 0 2.5 12S6 18.5 12 18.5a9.3 9.3 0 0 0 4.3-1M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+          </button>
+        </span>
+      </label>
+      <label class="switch keep-in"><input type="checkbox" name="remember" checked><span class="switch-ui" aria-hidden="true"></span><span>Keep me signed in on this phone</span></label>
+      <p class="form-error" data-error role="alert"></p>
+      <button class="btn btn-red btn-lg btn-block" type="submit">Sign in</button>
+      <p class="muted small">Forgot your password? Ask your manager to reset it in the Team tab.</p>
+    </form>
+  </section>
+
+  <!-- APP -->
+  <div class="screen shell" data-screen="app" hidden>
+    <header class="topbar">
+      <img src="../assets/brand/logo.webp" alt="TRD Motorcycles" class="topbar-logo">
+      <button class="me-btn" type="button" data-go="profile" aria-label="Your profile"><span data-me-avatar></span></button>
+    </header>
+
+    <!-- HOME -->
+    <main class="view" data-view="home">
+      <p class="kicker" data-greeting>Good morning</p>
+      <h1 class="view-title" data-me-name></h1>
+      <div class="stats">
+        <div><b data-stat="all">0</b><span>posts</span></div>
+        <div><b data-stat="bike">0</b><span>bikes listed</span></div>
+        <div><b data-stat="gear">0</b><span>gear items</span></div>
+      </div>
+      <div class="quick">
+        <button type="button" class="quick-card q-bike" data-new="bike"><span class="q-ico"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5.5" cy="16" r="3.5"/><circle cx="18.5" cy="16" r="3.5"/><path d="M5.5 16 9 9h5l4.5 7M14 9l-1.5-3H10m4 3h3.5"/></svg></span><b>Just in</b><small>New bike on the floor</small></button>
+        <button type="button" class="quick-card q-gear" data-new="gear"><span class="q-ico"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14a8 8 0 0 1 16 0v2.5a1.5 1.5 0 0 1-1.5 1.5H13l-2-4H4Z"/><path d="M12.5 9.5H20"/></svg></span><b>Gear</b><small>Kit for the shop</small></button>
+        <button type="button" class="quick-card q-floor" data-new="floor"><span class="q-ico"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2l1.5-2h6l1.5 2h2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5Z"/><circle cx="12" cy="13" r="3.5"/></svg></span><b>Showroom</b><small>Shots of the floor</small></button>
+        <button type="button" class="quick-card q-handover" data-new="handover"><span class="q-ico"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="15" r="4"/><path d="m11 12 8-8m-3 3 2.5 2.5M14 9l2 2"/></svg></span><b>Handover</b><small>A customer collects</small></button>
+      </div>
+      <div class="list-head">
+        <h2 data-list-title>Your posts</h2>
+        <a class="link-btn" href="../#showroom" target="_blank" rel="noopener">See the website</a>
+      </div>
+      <ul class="posts" data-posts></ul>
+      <div class="blank" data-posts-empty hidden>
+        <p><b>Nothing posted yet.</b></p>
+        <p>Tap one of the cards above to put your first photos on the website.</p>
+      </div>
+    </main>
+
+    <!-- STOCK: everything on the website, for every salesperson -->
+    <main class="view" data-view="stock" hidden>
+      <p class="kicker">On the website</p>
+      <h1 class="view-title">The <em>floor.</em></h1>
+      <div class="segmented seg-2 seg-big" role="radiogroup" aria-label="Bikes or gear" data-stock-type>
+        <label><input type="radio" name="stocktype" value="bikes" checked><span data-count-bikes>Bikes</span></label>
+        <label><input type="radio" name="stocktype" value="gear"><span data-count-gear>Gear</span></label>
+        <i class="seg-thumb" aria-hidden="true"></i>
+      </div>
+      <p class="muted stock-summary" data-stock-summary>Loading the stock…</p>
+      <button class="btn btn-red btn-lg btn-block" type="button" data-new="bike" data-stock-add>
+        <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        <span data-stock-add-label>Add a bike</span>
+      </button>
+      <div class="stock-tools">
+        <label class="search-field">
+          <span class="sr">Search stock</span>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg>
+          <input type="search" placeholder="Make, model, year or stock no." autocomplete="off" enterkeyhint="search" data-stock-q>
+        </label>
+        <div class="segmented seg-2" role="radiogroup" aria-label="Which bikes" data-stock-seg>
+          <label><input type="radio" name="stockview" value="live" checked><span data-count-live>On the website</span></label>
+          <label><input type="radio" name="stockview" value="sold"><span data-count-sold>Sold</span></label>
+          <i class="seg-thumb" aria-hidden="true"></i>
+        </div>
+      </div>
+      <ul class="stock-list" data-stock-list></ul>
+      <div class="blank" data-stock-empty hidden><p><b>Nothing here.</b></p><p data-stock-empty-text></p></div>
+    </main>
+
+    <!-- NEW POST -->
+    <main class="view" data-view="post" hidden>
+      <button class="back" type="button" data-go="home"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 6-6 6 6 6"/></svg>Back</button>
+      <h1 class="view-title">New <em>post.</em></h1>
+      <form class="post-form" data-post-form novalidate>
+        <div class="segmented" role="radiogroup" aria-label="What are you posting?">
+          <label><input type="radio" name="kind" value="bike" checked><span>Bike</span></label>
+          <label><input type="radio" name="kind" value="gear"><span>Gear</span></label>
+          <label><input type="radio" name="kind" value="floor"><span>Showroom</span></label>
+          <label><input type="radio" name="kind" value="handover"><span>Handover</span></label>
+          <i class="seg-thumb" aria-hidden="true"></i>
+        </div>
+        <p class="kind-help" data-kind-help></p>
+
+        <div class="photos" data-photos>
+          <label class="photo-add">
+            <input type="file" accept="image/*" multiple data-file>
+            <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2l1.5-2h6l1.5 2h2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5Z"/><circle cx="12" cy="13" r="3.5"/></svg>
+            <span>Add photos</span>
+          </label>
+        </div>
+        <p class="muted small">Up to 12. The first photo is the cover. Photos are resized on your phone before they upload, so it's quick on data.</p>
+
+        <fieldset class="bike-fields" data-bike-fields>
+          <legend class="sr">Bike details</legend>
+          <div class="row2">
+            <label class="field"><span>Make</span><input name="make" placeholder="Kawasaki" autocomplete="off" list="makes"></label>
+            <label class="field"><span>Model</span><input name="model" placeholder="Ninja ZX-10R" autocomplete="off"></label>
+          </div>
+          <div class="field"><span>Year</span>
+            <div class="wheel" data-wheel="year" data-label="Year"></div>
+            <input type="hidden" name="year" value="">
+          </div>
+          <div class="row2">
+            <label class="field"><span>Price (R)</span><input name="price" inputmode="numeric" placeholder="189900"></label>
+            <label class="field"><span>Mileage (km)</span><input name="mileage_km" inputmode="numeric" placeholder="12500"></label>
+          </div>
+          <div class="row2">
+            <label class="field"><span>Engine (cc)</span><input name="engine_cc" inputmode="numeric" placeholder="998"></label>
+            <label class="field"><span>Colour</span><input name="colour" placeholder="Lime green"></label>
+          </div>
+          <datalist id="makes"><option>BMW</option><option>Ducati</option><option>Harley-Davidson</option><option>Honda</option><option>Kawasaki</option><option>KTM</option><option>Suzuki</option><option>Triumph</option><option>Yamaha</option><option>Aprilia</option><option>MV Agusta</option><option>Husqvarna</option></datalist>
+        </fieldset>
+        <label class="field field-title" data-title-field hidden><span data-title-label>Title</span><input name="title" placeholder="Saturday on the floor"></label>
+        <fieldset class="bike-fields" data-gear-fields hidden>
+          <legend class="sr">Gear details</legend>
+          <div class="field"><span id="cat-label">Category</span>
+            <div class="wheel" data-wheel="category" data-label="Category"></div>
+            <input type="hidden" name="category" value="helmets">
+          </div>
+          <div class="row2">
+            <label class="field"><span>Brand</span><input name="brand" placeholder="Alpinestars" autocomplete="off"></label>
+            <label class="field"><span>Price (R)</span><input name="gear_price" inputmode="numeric" placeholder="4999"></label>
+          </div>
+          <label class="field"><span>Sizes in stock</span><input name="sizes" placeholder="S, M, L, XL" autocomplete="off"></label>
+        </fieldset>
+        <label class="field"><span data-caption-label>Notes for buyers</span><textarea name="caption" rows="4" maxlength="600" placeholder="Full service history, new tyres, one owner…"></textarea></label>
+
+        <p class="form-error" data-post-error role="alert"></p>
+        <div class="progress" data-progress hidden><i></i></div>
+        <button class="btn btn-red btn-lg btn-block" type="submit" data-post-submit>Post to the website</button>
+      </form>
+    </main>
+
+    <!-- PROFILE -->
+    <main class="view" data-view="profile" hidden>
+      <button class="back" type="button" data-go="home"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 6-6 6 6 6"/></svg>Back</button>
+      <div class="profile-top">
+        <label class="avatar-edit">
+          <span data-me-avatar-lg></span>
+          <input type="file" accept="image/*" data-avatar-file>
+          <span class="avatar-cam" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M4 8.5A1.5 1.5 0 0 1 5.5 7h2l1.5-2h6l1.5 2h2A1.5 1.5 0 0 1 20 8.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 17.5Z"/><circle cx="12" cy="13" r="3.5"/></svg></span>
+          <span class="sr">Change your photo</span>
+        </label>
+        <div>
+          <h1 class="view-title" data-me-name></h1>
+          <p class="muted" data-me-email></p>
+        </div>
+      </div>
+      <form class="card-form" data-profile-form novalidate>
+        <h2>Your profile on the website</h2>
+        <label class="field"><span>Name</span><input name="name" autocomplete="name" required></label>
+        <label class="field"><span>Title</span><input name="title" placeholder="Sales consultant"></label>
+        <label class="field"><span>WhatsApp number</span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="082 123 4567"></label>
+        <label class="field"><span>About you</span><textarea name="bio" rows="3" maxlength="280" placeholder="Rides a Tuono on weekends. Ask me about adventure bikes."></textarea></label>
+        <label class="switch"><input type="checkbox" name="public"><span class="switch-ui" aria-hidden="true"></span><span>Show me in “Talk to a rider” on the website</span></label>
+        <p class="form-error" data-profile-error role="alert"></p>
+        <button class="btn btn-red btn-block" type="submit">Save profile</button>
+      </form>
+      <form class="card-form" data-password-form novalidate>
+        <h2>Password</h2>
+        <input type="email" name="username" autocomplete="username" hidden data-me-username>
+        <label class="field"><span>Current password</span><input type="password" name="currentPassword" autocomplete="current-password"></label>
+        <label class="field"><span>New password</span><input type="password" name="newPassword" autocomplete="new-password" minlength="8"></label>
+        <p class="form-error" data-password-error role="alert"></p>
+        <button class="btn btn-glass btn-block" type="submit">Change password</button>
+      </form>
+      <button class="btn btn-glass btn-block signout" type="button" data-logout>Sign out</button>
+    </main>
+
+    <!-- TEAM (managers) -->
+    <main class="view" data-view="team" hidden>
+      <button class="back" type="button" data-go="home"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 6-6 6 6 6"/></svg>Back</button>
+      <h1 class="view-title">The <em>team.</em></h1>
+      <ul class="team-list" data-team-list></ul>
+      <form class="card-form" data-add-form novalidate>
+        <h2>Add a salesperson</h2>
+        <label class="field"><span>Name</span><input name="name" autocomplete="off" required></label>
+        <label class="field"><span>Email</span><input name="email" type="email" autocomplete="off" required></label>
+        <label class="field"><span>WhatsApp number</span><input name="phone" type="tel" inputmode="tel" autocomplete="off"></label>
+        <label class="field"><span>First password</span><input name="password" type="text" autocomplete="off" minlength="8" required></label>
+        <label class="switch"><input type="checkbox" name="manager"><span class="switch-ui" aria-hidden="true"></span><span>Manager (can add and switch off people)</span></label>
+        <p class="form-error" data-add-error role="alert"></p>
+        <button class="btn btn-red btn-block" type="submit">Add to the team</button>
+        <p class="muted small">Send them the link to this app with their email and first password. They can change it under Profile.</p>
+      </form>
+    </main>
+
+    <!-- TAB BAR -->
+    <nav class="tabbar" aria-label="App">
+      <button type="button" data-go="home" aria-current="page"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-6h-5v6H5a1 1 0 0 1-1-1Z"/></svg><span>Home</span></button>
+      <button type="button" data-go="stock"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="5.5" cy="16" r="3.5"/><circle cx="18.5" cy="16" r="3.5"/><path d="M5.5 16 9 9h5l4.5 7M14 9l-1.5-3H10m4 3h3.5"/></svg><span>Stock</span></button>
+      <button type="button" class="tab-post" data-new="bike" aria-label="New post"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+      <button type="button" data-go="team" data-manager-only hidden><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8.5" r="3.2"/><path d="M3.5 19a5.5 5.5 0 0 1 11 0M16 5.5a3 3 0 0 1 0 6M20.5 19a5 5 0 0 0-3.5-4.8"/></svg><span>Team</span></button>
+      <button type="button" data-go="profile"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.6"/><path d="M5 20a7 7 0 0 1 14 0"/></svg><span>Profile</span></button>
+    </nav>
+  </div>
+
+  <!-- INSTALL: shown when the browser has no install prompt of its own (iPhone Safari, Firefox, plain http) -->
+  <div class="install-dlg" data-install-dlg role="dialog" aria-modal="true" aria-labelledby="install-title" hidden>
+    <div class="install-card">
+      <div class="install-head">
+        <div><h2 id="install-title" data-install-title>Download TRD Sales</h2><p data-install-desc>Download TRD Sales to your home screen, then open it like any other app.</p></div>
+        <button class="install-x" type="button" data-install-close aria-label="Close"><svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+      </div>
+      <ol class="install-steps" data-install-steps></ol>
+      <button class="install-done" type="button" data-install-close>Done</button>
+    </div>
+  </div>
+  <p class="toast" data-toast role="status" aria-live="polite"></p>
+  <script src="sales.js"></script>
+</body>
+</html>

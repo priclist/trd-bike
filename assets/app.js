@@ -1,4 +1,6 @@
-// Hero video, nav, stock list, filters, riding styles and bike detail. Data comes from data/stock.json (see scraper/).
+// Nav, stock list, filters, riding styles and bike detail. Data comes from data/stock.json (see scraper/)
+// plus the bikes the sales team posts in the TRD Sales app (/api/public), which show first as "Just in",
+// minus anything the team has marked sold.
 (() => {
   const WHATSAPP = "27642970282";
   const $ = (sel, root = document) => root.querySelector(sel);
@@ -23,7 +25,7 @@
     Other: "Everything else on the floor.",
   };
 
-  // Accent per bike, picked from its paint or finish in the photos. Red is kept for the redline, yellow for buttons.
+  // Accent per bike, picked from its paint or finish in the photos. TRD red stays reserved for buttons.
   const PAINT = {
     459683: "#ff8a3d", // Pan America 1250: Harley orange tank badge
     459655: "#8e8cff", // R 1250 RT: sapphire metallic
@@ -38,6 +40,14 @@
   ];
   const accentOf = (b) => PAINT[b.id] || (COLOUR_ACCENTS.find(([re]) => re.test(b.colour || "")) || [0, "#c9d1da"])[1];
 
+  // engine-size bands for the cc filter: [value, label, min, max]
+  const CC_BANDS = [
+    ["0-400", "Up to 400 cc", 0, 400],
+    ["401-700", "401 to 700 cc", 401, 700],
+    ["701-1000", "701 to 1000 cc", 701, 1000],
+    ["1001-1300", "1001 to 1300 cc", 1001, 1300],
+    ["1301-", "Over 1300 cc", 1301, Infinity],
+  ];
   const money = (n) => "R" + Math.round(n).toLocaleString("en-US");
   const num = (n) => Math.round(n).toLocaleString("en-US");
   const km = (n) => num(n) + " km";
@@ -94,17 +104,32 @@
   }, true);
 
   // ---------- data ----------
-  const ready = fetch("data/stock.json")
-    .then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); })
-    .then(async (rows) => {
-      const probe = rows.find((r) => r.images && r.images.length);
-      const useLocal = probe ? await fetch("data/" + probe.images[0], { method: "HEAD" }).then((r) => r.ok, () => false) : false;
-      return rows.map((r) => normalise(r, useLocal));
-    });
+  // the team feed only exists when the site runs on its own server (npm start); on static hosting it's simply empty
+  const publicFeed = fetch("/api/public")
+    .then((r) => (r.ok && /json/.test(r.headers.get("content-type")) ? r.json() : { team: [], posts: [] }))
+    .catch(() => ({ team: [], posts: [] }));
+
+  const fromPost = (p) => ({
+    id: `p-${p.id}`, stock_no: "Just in", year: p.year, make: p.make, model: p.model, price: p.price || 0,
+    mileage_km: p.mileage_km, engine_cc: p.engine_cc, colour: p.colour, description: p.caption,
+    images: p.photos, image_urls: p.photos, created: p.created, justIn: true, postedBy: p.author,
+  });
+
+  const ready = Promise.all([
+    fetch("data/stock.json").then((r) => { if (!r.ok) throw new Error(r.status); return r.json(); }),
+    publicFeed,
+  ]).then(async ([rows, feed]) => {
+    const probe = rows.find((r) => r.images && r.images.length);
+    const useLocal = probe ? await fetch("data/" + probe.images[0], { method: "HEAD" }).then((r) => r.ok, () => false) : false;
+    // bikes the team marked sold in the TRD Sales app come off the site straight away
+    const sold = new Set(feed.sold || []);
+    const posted = feed.posts.filter((p) => p.kind === "bike").map(fromPost);
+    return [...posted.map((r) => normalise(r, false)), ...rows.filter((r) => !sold.has(String(r.id))).map((r) => normalise(r, useLocal))];
+  });
 
   // specials first, then the priciest bike from each make, skipping makes already used
   function pickFeatured(bikes, count, skip = new Set()) {
-    const ranked = bikes.filter((b) => b.images.length && b.price && !skip.has(b.id))
+    const ranked = bikes.filter((b) => b.images.length && b.price && !b.justIn && !skip.has(b.id))
       .sort((a, b) => (!!b.wasPrice - !!a.wasPrice) || b.price - a.price);
     const seen = new Set();
     const out = [];
@@ -117,24 +142,9 @@
     return out;
   }
 
-  window.TRD = { ready, openBike: (id) => openBike(id), money, num, km, pickFeatured, img, cut, accentOf, reduceMotion, esc };
+  window.TRD = { ready, publicFeed, openBike: (id) => openBike(id), money, num, km, pickFeatured, img, cut, accentOf, reduceMotion, esc, waLink };
 
-  // ---------- hero video ----------
-  // Sources are attached here rather than in the HTML, so nothing downloads for reduced-motion or Save-Data visitors.
-  const hero = $("[data-hero]");
-  const video = $("[data-hero-video]");
-  const saveData = navigator.connection && navigator.connection.saveData;
-  if (!reduceMotion.matches && !saveData) {
-    const phone = matchMedia("(max-width: 700px)").matches;
-    const sources = phone ? [[video.dataset.srcMobile, "video/mp4"]] : [[video.dataset.srcWebm, "video/webm"], [video.dataset.srcMp4, "video/mp4"]];
-    video.innerHTML = sources.map(([src, type]) => `<source src="${src}" type="${type}">`).join("");
-    video.preload = "auto";
-    video.load();
-    // play the video and keep it looping
-    video.play().catch(() => {});
-  }
-
-  // ---------- nav + hero hand-off ----------
+  // ---------- nav ----------
   const nav = $("[data-nav]");
   const menuBtn = $("[data-menu]");
   const menu = $("[data-menu-panel]");
@@ -149,11 +159,11 @@
   addEventListener("keydown", (e) => { if (e.key === "Escape" && !menu.hidden) { setMenu(false); menuBtn.focus(); } });
 
   let tick = 0;
+  const hero = $("[data-hero]");
   function onScroll() {
     tick = 0;
-    const p = Math.min(1, scrollY / Math.max(1, hero.offsetHeight));
-    hero.style.setProperty("--p", reduceMotion.matches ? 0 : p.toFixed(4));
     nav.classList.toggle("scrolled", scrollY > 40);
+    nav.classList.toggle("on-dark", !!hero && scrollY < hero.offsetHeight - nav.offsetHeight);
   }
   addEventListener("scroll", () => { if (!tick) tick = requestAnimationFrame(onScroll); }, { passive: true });
   onScroll();
@@ -175,6 +185,11 @@
       chip("", "All bikes", bikes.length, true) +
       [...STYLES.map(([s]) => s), "Other"].filter((s) => styleCounts[s]).map((s) => chip(s, s, styleCounts[s])).join(""));
 
+    const inBand = ([, , min, max]) => bikes.filter((b) => b.engine_cc >= min && b.engine_cc <= max).length;
+    $("[data-cc]").insertAdjacentHTML("beforeend",
+      CC_BANDS.map((band) => [band, inBand(band)]).filter(([, n]) => n)
+        .map(([[value, label], n]) => `<option value="${value}">${label} (${n})</option>`).join(""));
+
     const makes = {};
     bikes.forEach((b) => (makes[b.makeLabel] = (makes[b.makeLabel] || 0) + 1));
     $("[data-make]").insertAdjacentHTML("beforeend",
@@ -186,7 +201,7 @@
     return `
       <li class="bike">
         <div class="bike-photo">
-          ${b.wasPrice ? '<span class="special-tag">On special</span>' : ""}
+          ${b.justIn ? '<span class="just-tag">Just in</span>' : b.wasPrice ? '<span class="special-tag">On special</span>' : ""}
           ${img(b, 0, `alt="${esc(b.title)}" loading="lazy" decoding="async" width="668" height="501"`)}
         </div>
         <p class="bike-make">${esc([b.year, b.makeLabel].filter(Boolean).join(" "))}</p>
@@ -196,6 +211,11 @@
           ${b.mileage_km != null ? `<div><dt class="sr">Mileage</dt><dd>${km(b.mileage_km)}</dd></div>` : ""}
         </dl>
         ${b.monthly_installment ? `<p class="bike-pm">or about ${money(b.monthly_installment)} a month</p>` : ""}
+        <ul class="bike-chips">
+          <li>${esc(b.style)}</li>
+          ${b.engine_cc ? `<li>${num(b.engine_cc)} cc</li>` : ""}
+          ${b.power_kw ? `<li>${num(b.power_kw)} kW</li>` : ""}
+        </ul>
         <a class="btn btn-wa" href="${esc(waLink(askAbout(b)))}" target="_blank" rel="noopener">
           <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20.5 5.3 16A8.5 8.5 0 1 1 8.4 19l-4.4 1.5Z"/></svg>
           WhatsApp about this bike<span class="sr">: ${esc(b.title)}</span>
@@ -204,28 +224,39 @@
   }
 
   const sorters = {
-    featured: (a, b) => (!!b.wasPrice - !!a.wasPrice) || b.price - a.price,
+    featured: (a, b) => (!!b.justIn - !!a.justIn) || (!!b.wasPrice - !!a.wasPrice) || b.price - a.price,
     "price-asc": (a, b) => a.price - b.price,
     "price-desc": (a, b) => b.price - a.price,
     "year-desc": (a, b) => (b.year || 0) - (a.year || 0) || a.price - b.price,
     "km-asc": (a, b) => (a.mileage_km ?? 1e9) - (b.mileage_km ?? 1e9),
   };
 
-  function render() {
+  // the grid shows 12 at a time so the page stays short; any filter change starts again at 12
+  const PAGE = 12;
+  let shown = PAGE;
+  const moreBtn = $("[data-more]");
+  function render(keepPage = false) {
+    if (!keepPage) shown = PAGE;
     const f = new FormData(form);
     const q = (f.get("q") || "").trim().toLowerCase();
     const style = f.get("style") || "";
     const make = f.get("make") || "";
     const max = Number(f.get("price")) || Infinity;
+    const band = CC_BANDS.find(([value]) => value === f.get("cc"));
     const list = bikes
       .filter((b) => !q || `${b.title} ${b.style} ${b.colour || ""}`.toLowerCase().includes(q))
       .filter((b) => !style || b.style === style)
       .filter((b) => !make || b.makeLabel === make)
       .filter((b) => b.price <= max)
+      .filter((b) => !band || (b.engine_cc >= band[2] && b.engine_cc <= band[3]))
       .sort(sorters[f.get("sort")] || sorters.featured);
 
-    grid.innerHTML = list.map(card).join("");
+    grid.innerHTML = list.slice(0, shown).map(card).join("");
     emptyEl.hidden = list.length > 0;
+    const left = list.length - shown;
+    moreBtn.hidden = left <= 0;
+    moreBtn.querySelector("span").textContent = `Show ${Math.min(PAGE, left)} more`;
+    moreBtn.querySelector("small").textContent = `${Math.max(0, left)} left`;
     countEl.textContent = list.length === bikes.length
       ? `${bikes.length} pre-owned bikes, all at our Boksburg showroom. Tap a bike's name for every photo and the full spec sheet.`
       : `Showing ${list.length} of ${bikes.length} bikes.`;
@@ -238,7 +269,13 @@
     $("#stock").scrollIntoView({ behavior: reduceMotion.matches ? "auto" : "smooth" });
   }
 
-  form.addEventListener("input", render);
+  form.addEventListener("input", () => render());
+  moreBtn.addEventListener("click", () => {
+    const first = grid.children.length;
+    shown += PAGE;
+    render(true);
+    grid.children[first]?.querySelector("button")?.focus({ preventScroll: true });
+  });
   $("[data-clear]").addEventListener("click", () => { form.reset(); render(); });
   grid.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-id]");
@@ -323,6 +360,7 @@
     dialog.style.setProperty("--accent", accentOf(b));
     $("[data-detail-style]").textContent = b.style;
     $("[data-detail-flag]").hidden = !b.wasPrice;
+    $("[data-detail-just]").hidden = !b.justIn;
     $("[data-detail-make]").textContent = [b.year, b.makeLabel].filter(Boolean).join(" ");
     $("[data-detail-title]").textContent = b.model || b.title;
     $("[data-detail-price]").innerHTML = (b.price ? money(b.price) : "Ask for price") + (b.wasPrice ? `<s>${money(b.wasPrice)}</s>` : "");
@@ -414,7 +452,7 @@
       buildStyles();
       render();
       const monthly = bikes.map((b) => b.monthly_installment).filter(Boolean);
-      if (monthly.length) $("[data-min-monthly]").textContent = money(Math.min(...monthly));
+      if (monthly.length) document.querySelectorAll("[data-min-monthly]").forEach((el) => (el.textContent = money(Math.min(...monthly))));
       const m = location.hash.match(/^#bike-(.+)$/);
       if (m) openBike(m[1]);
     })

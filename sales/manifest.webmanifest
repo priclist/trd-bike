@@ -1,0 +1,17 @@
+{
+  "id": "/sales/",
+  "name": "TRD Sales",
+  "short_name": "TRD Sales",
+  "description": "The TRD Motorcycles sales team app: post new arrivals, showroom shots and handovers straight to the website.",
+  "start_url": "/sales/?source=app",
+  "scope": "/sales/",
+  "display": "standalone",
+  "background_color": "#f5f5f7",
+  "theme_color": "#f5f5f7",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "/icons/sales-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icons/sales-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/icons/sales-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
